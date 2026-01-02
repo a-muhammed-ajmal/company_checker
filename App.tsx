@@ -191,17 +191,64 @@ function App() {
 
           <ResultCard result={result} />
 
-          {/* Footer Info */}
-          <div className="mt-12 text-center pb-4 opacity-60">
-            <p className="text-[10px] text-slate-400 font-medium uppercase tracking-widest">
-              Database Updated: Jan 1st, 2026
-            </p>
-            <div className="mt-2 text-[10px] text-slate-300">
-              v1.0.0 • Secure Access
-            </div>
+
+        {/* Helper for PWA Install */}
+        <InstallPrompt />
+
+        {/* Footer Info */}
+        <div className="mt-12 text-center pb-8 opacity-60">
+          <p className="text-[10px] text-slate-400 font-medium uppercase tracking-widest">
+            Database Updated: Jan 1st, 2026
+          </p>
+          <div className="mt-2 text-[10px] text-slate-300">
+            v1.0.0 • Secure Access
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+// Internal component to handle Install Prompt logic cleanly
+function InstallPrompt() {
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [showInstall, setShowInstall] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstall(true);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstall = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setDeferredPrompt(null);
+      setShowInstall(false);
+    }
+  };
+
+  if (!showInstall) return null;
+
+  return (
+    <div className="px-5 mb-4 animate-fade-in">
+      <button
+        onClick={handleInstall}
+        className="w-full bg-slate-900 text-white rounded-xl py-3 flex items-center justify-center gap-2 shadow-lg shadow-slate-900/10 active:scale-95 transition-all"
+      >
+        <div className="p-1 bg-white/10 rounded-lg">
+           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+           </svg>
+        </div>
+        <span className="text-sm font-semibold">Install App</span>
+      </button>
     </div>
   );
 }
