@@ -201,7 +201,7 @@ function App() {
             Database Updated: Jan 1st, 2026
           </p>
           <div className="mt-2 text-[10px] text-slate-300">
-            v1.0.0 • Secure Access
+            © 2026 by Ajmal
           </div>
         </div>
       </div>
