@@ -1,4 +1,4 @@
-```
+
 import React from 'react';
 import { CheckCircle2, XCircle, AlertCircle, Building2 } from 'lucide-react';
 import { DetailRow } from './DetailRow';
