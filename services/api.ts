@@ -42,26 +42,29 @@ export const saveToCache = (type: 'tml' | 'good', company: CompanyData) => {
   }
 };
 
-const isMatch = (normalizedQuery: string, normalizedDbName: string): boolean => {
-  // Exact match
+const isConfirmedMatch = (normalizedQuery: string, normalizedDbName: string) => {
+  // 1. Exact identical match
   if (normalizedQuery === normalizedDbName) return true;
 
-  // Containment match with safety length check to avoid false positives on short acronyms
-  // "WORLEY ENGINEERING" (db) should match "WORLEY ENGINEERING PTY..." (query)
+  // 2. Query contains DB Name (User inputs "WORLEY... BRANCH", DB has "WORLEY")
   if (normalizedQuery.length > 8 && normalizedDbName.length > 3) {
     if (normalizedQuery.includes(normalizedDbName)) return true;
-  }
-
-  // Inverse containment: "WORLEY" (query) matches "WORLEY PARSONS" (db)
-  // Only if query is sufficiently specific
-  if (normalizedQuery.length > 4 && normalizedDbName.length > 8) {
-    if (normalizedDbName.includes(normalizedQuery)) return true;
   }
 
   return false;
 };
 
-// Helper to get a broader search term for the API to find potential matches
+const isSuggestionMatch = (normalizedQuery: string, normalizedDbName: string) => {
+    // If confirmed, it's not a suggestion (handled by logic flow)
+    if (isConfirmedMatch(normalizedQuery, normalizedDbName)) return false;
+
+    // DB contains Query (User "ZULEKHA", DB "ZULEKHA HOSPITAL")
+    if (normalizedDbName.includes(normalizedQuery) && normalizedQuery.length > 3) return true;
+
+    return false;
+};
+
+// Helper to get a broader search term
 const getSearchableTerms = (query: string): string => {
   const words = query.trim().split(/\s+/).filter(w => w.length > 2);
   if (words.length >= 2) {
@@ -108,35 +111,65 @@ export const searchOnline = async (query: string): Promise<{
   let suggestions: Suggestion[] = [];
   let exactMatch: { type: 'tml' | 'good', data: CompanyData } | undefined;
 
-  // Process TML Data
-  if (tmlData.length > 0) {
-    // Check for "Exact" match using our improved logic against the FULL original query
-    const exact = tmlData.find(c => isMatch(normalizedQuery, normalizeText(c.company_name)));
-    if (exact) {
-      exactMatch = { type: 'tml', data: exact };
-      return { exactMatch, suggestions: [] };
-    }
-    suggestions = [...suggestions, ...tmlData.map(c => ({ ...c, type: 'tml' as const }))];
-  }
+  // 1. Find Primary Exact Matches (Priority: TML > Good)
+  // We prefer TML, but even if found, we should still look for Good suggestions
+  const tmlExact = tmlData.find(c => isConfirmedMatch(normalizedQuery, normalizeText(c.company_name)));
 
-  // Process Good Data
-  if (goodData.length > 0) {
-    const exact = goodData.find(c => isMatch(normalizedQuery, normalizeText(c.employer_name)));
-    if (exact) {
-      if (!exactMatch) {
-         exactMatch = { type: 'good', data: exact };
-         return { exactMatch, suggestions: [] };
+  // If TML Exact Match Found
+  if (tmlExact) {
+    exactMatch = { type: 'tml', data: tmlExact };
+    // Add ALL Good entries as suggestions (both exact and partial) because user might want to know if it's there too
+    suggestions = [
+        ...goodData.map(c => ({ ...c, type: 'good' as const }))
+    ];
+  } else {
+      // Check Good Exact Match only if TML NOT found
+      const goodExact = goodData.find(c => isConfirmedMatch(normalizedQuery, normalizeText(c.employer_name)));
+      if (goodExact) {
+          exactMatch = { type: 'good', data: goodExact };
+          // Add TML partials as suggestions
+          suggestions = [
+              ...tmlData.map(c => ({ ...c, type: 'tml' as const }))
+          ];
       }
-    }
-    suggestions = [...suggestions, ...goodData.map(c => ({ ...c, type: 'good' as const }))];
   }
 
-  // Deduplicate suggestions based on ID or Name
+  // 2. If NO Exact Match Found at all, collect suggestions from both
+  if (!exactMatch) {
+      suggestions = [
+          ...tmlData.map(c => ({ ...c, type: 'tml' as const })),
+          ...goodData.map(c => ({ ...c, type: 'good' as const }))
+      ];
+  }
+
+  // 3. Deduplicate and clean up suggestions
+  // - Remove the item that is currently the "Exact Match" from suggestions list
   const uniqueSuggestions: Suggestion[] = [];
   const seen = new Set<string>();
 
+  // Filter helper
+  const isSameAsExact = (s: Suggestion) => {
+      if (!exactMatch) return false;
+      const sName = s.type === 'tml' ? s.company_name : s.employer_name;
+      const eName = exactMatch.data.type === 'tml'
+        ? (exactMatch.data as TMLCompany).company_name
+        : (exactMatch.data as GoodCompany).employer_name; // Use casted property access if needed or simple check
+
+      // We can check by ID if available or Name
+      return sName === (exactMatch.type === 'tml' ? (exactMatch.data as TMLCompany).company_name : (exactMatch.data as GoodCompany).employer_name);
+  };
+
+  const exactName = exactMatch
+    ? (exactMatch.type === 'tml' ? (exactMatch.data as TMLCompany).company_name : (exactMatch.data as GoodCompany).employer_name)
+    : '';
+
   for (const s of suggestions) {
-    const key = s.type === 'tml' ? `tml-${s.company_name}` : `good-${s.employer_name}`;
+    const sName = s.type === 'tml' ? s.company_name : s.employer_name;
+
+    // Skip if it's the exact match we are showing
+    if (exactMatch && s.type === exactMatch.type && sName === exactName) continue;
+
+    const key = s.type === 'tml' ? `tml-${sName}` : `good-${sName}`;
     if (!seen.has(key)) {
       seen.add(key);
       uniqueSuggestions.push(s);
@@ -152,12 +185,12 @@ export const searchOffline = (query: string, cachedData: CacheData): {
 } => {
   const normalizedQuery = normalizeText(query);
 
-  const tmlMatch = cachedData.tml.find(c => isMatch(normalizedQuery, normalizeText(c.company_name)));
+  const tmlMatch = cachedData.tml.find(c => isConfirmedMatch(normalizedQuery, normalizeText(c.company_name)));
   if (tmlMatch) {
     return { exactMatch: { type: 'tml', data: tmlMatch }, offline: true };
   }
 
-  const goodMatch = cachedData.good.find(c => isMatch(normalizedQuery, normalizeText(c.employer_name)));
+  const goodMatch = cachedData.good.find(c => isConfirmedMatch(normalizedQuery, normalizeText(c.employer_name)));
   if (goodMatch) {
     return { exactMatch: { type: 'good', data: goodMatch }, offline: true };
   }
