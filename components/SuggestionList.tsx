@@ -21,30 +21,30 @@ export const SuggestionList: React.FC<SuggestionListProps> = ({ suggestions, onS
           <button
             key={`${suggestion.type}-${index}`}
             onClick={() => onSelect(suggestion)}
-            className="group w-full text-left p-3 md:p-4 bg-gray-50 hover:bg-white hover:shadow-md hover:border-blue-200 rounded-xl transition-all duration-200 border border-transparent"
+            className="group w-full text-left p-3 md:p-3 bg-gray-50 hover:bg-white hover:shadow-md hover:border-blue-200 rounded-xl transition-all duration-200 border border-transparent"
           >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3 overflow-hidden">
-                 <div className={`p-2 rounded-lg flex-shrink-0 ${suggestion.type === 'tml' ? 'bg-green-100 text-green-600' : 'bg-blue-100 text-blue-600'}`}>
-                    <Building className="w-5 h-5" />
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start gap-3 min-w-0">
+                 <div className={`p-1.5 rounded-lg flex-shrink-0 mt-0.5 ${suggestion.type === 'tml' ? 'bg-green-100 text-green-600' : 'bg-blue-100 text-blue-600'}`}>
+                    <Building className="w-4 h-4" />
                  </div>
                  <div className="min-w-0">
-                    <p className="font-semibold text-gray-900 truncate pr-2">
+                    <p className="font-semibold text-gray-900 text-sm leading-tight break-words whitespace-normal">
                       {suggestion.type === 'tml' ? suggestion.company_name : suggestion.employer_name}
                     </p>
                     {suggestion.type === 'tml' && suggestion.group_name && (
-                      <p className="text-xs text-gray-500 truncate">{suggestion.group_name}</p>
+                      <p className="text-xs text-gray-500 mt-0.5 break-words">{suggestion.group_name}</p>
                     )}
                  </div>
               </div>
 
-              <div className="flex items-center gap-3 flex-shrink-0">
-                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+              <div className="flex items-center gap-2 flex-shrink-0 pt-0.5">
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                   suggestion.type === 'tml' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
                 }`}>
                   {suggestion.type === 'tml' ? 'TML' : 'GOOD'}
                 </span>
-                <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500" />
+                <ChevronRight className="w-3 h-3 text-gray-400 group-hover:text-blue-500" />
               </div>
             </div>
           </button>
