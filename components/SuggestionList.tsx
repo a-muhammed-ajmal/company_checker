@@ -21,7 +21,7 @@ export const SuggestionList: React.FC<SuggestionListProps> = ({ suggestions, onS
           <button
             key={`${suggestion.type}-${index}`}
             onClick={() => onSelect(suggestion)}
-            className="group w-full text-left p-4 bg-gray-50 hover:bg-white hover:shadow-md hover:border-blue-200 rounded-xl transition-all duration-200 border border-transparent"
+            className="group w-full text-left p-3 md:p-4 bg-gray-50 hover:bg-white hover:shadow-md hover:border-blue-200 rounded-xl transition-all duration-200 border border-transparent"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3 overflow-hidden">
@@ -37,7 +37,7 @@ export const SuggestionList: React.FC<SuggestionListProps> = ({ suggestions, onS
                     )}
                  </div>
               </div>
-              
+
               <div className="flex items-center gap-3 flex-shrink-0">
                 <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
                   suggestion.type === 'tml' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'

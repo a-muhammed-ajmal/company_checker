@@ -207,9 +207,9 @@ function App() {
           <p className="text-sm text-slate-500 font-medium">
             Database Updated: <span className="text-slate-700 font-bold">Jan 1st, 2026</span>
           </p>
-          <p className="text-xs text-slate-400 mt-2">
+          {/* <p className="text-xs text-slate-400 mt-2">
              Cached Entries: {cachedData.tml.length + cachedData.good.length}
-          </p>
+          </p> */}
           <div className="mt-4 text-xs text-gray-300">
             Secure Database Access • v1.0.0
           </div>
