@@ -1,0 +1,5 @@
+{
+  "name": "Company Status Checker",
+  "description": "A tool to verify company status against TML and Good lists with offline capabilities.",
+  "requestFramePermissions": []
+}
