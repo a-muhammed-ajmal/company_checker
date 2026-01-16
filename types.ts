@@ -4,6 +4,8 @@ export type CompanySource =
   | "credit_card_approved"
   | "delisted_company_1"
   | "delisted_company_2"
+  | "enbd_approved"
+  | "good_listed"
 
 export type UIType = "DELISTED" | "TML" | "GOOD"
 

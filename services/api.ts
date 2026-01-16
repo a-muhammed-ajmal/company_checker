@@ -16,43 +16,59 @@ interface TableConfig {
 }
 
 const TABLE_CONFIGS: TableConfig[] = [
-  // PRIORITY 1: DELISTED (High Risk) - Red Theme
+  // TIER 1: DELISTED (Red Theme)
   {
     tableName: "delisted_company_1",
-    columnName: "NAME OF THE COMPANY",
+    columnName: "company_name",
     type: "DELISTED",
     priority: 1,
     label: "Deletion / Suspension: Delisted Employer from Jan08",
   },
   {
     tableName: "delisted_company_2",
-    columnName: "NAME OF THE COMPANY",
+    columnName: "company_name",
     type: "DELISTED",
-    priority: 1,
+    priority: 2, // Sub-priority within Tier 1
     label: "Deletion / Suspension: Delisted Employer July02 to Dec07",
   },
 
-  // PRIORITY 2: TML (Target Market List) - Green Theme
+  // TIER 2: TML (Green Theme)
   {
     tableName: "eib_approved",
-    columnName: "Name of the Company",
+    columnName: "company_name",
     type: "TML",
-    priority: 2,
-    label: "TML (Target Market List): EIB - Approved Employer",
+    priority: 3,
+    label: "TML: EIB – Approved Employer",
+  },
+  {
+    tableName: "enbd_approved",
+    columnName: "company_name",
+    type: "TML",
+    priority: 4,
+    label: "TML: ENBD – Approved Employer",
   },
   {
     tableName: "payroll_approved",
-    columnName: "NAME OF THE COMPANY",
+    columnName: "company_name",
     type: "TML",
-    priority: 2,
-    label: "TML (Target Market List): Payroll Employer",
+    priority: 5,
+    label: "TML: Payroll Employer",
   },
   {
     tableName: "credit_card_approved",
-    columnName: "NAME OF THE COMPANY",
+    columnName: "company_name",
     type: "TML",
-    priority: 2,
-    label: "TML (Target Market List): Credit Card Approved Employer",
+    priority: 6,
+    label: "TML: Credit Card Approved Employer",
+  },
+
+  // TIER 3: GOOD LIST (Blue Theme)
+  {
+    tableName: "good_listed",
+    columnName: "employer_name",
+    type: "GOOD",
+    priority: 7,
+    label: "Good List Company (NTML): Verified Corporate Status",
   },
 ]
 
