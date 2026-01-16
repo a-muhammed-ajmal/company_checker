@@ -47,12 +47,14 @@ function App() {
       {/* CONTENT BOX */}
       <div className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 p-6 mt-8">
 
-        <header className="flex flex-col items-center mb-6">
-          <ShieldCheck className="w-7 h-7 text-blue-600 mb-2" />
-          <h1 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+        <header className="flex flex-col items-center mb-8 pb-6 border-b border-slate-100 dark:border-slate-800">
+          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30">
+            <ShieldCheck className="w-8 h-8 text-white" strokeWidth={2.5} />
+          </div>
+          <h1 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2">
             Company Checker
           </h1>
-          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+          <p className="text-sm text-slate-600 dark:text-slate-400 font-semibold">
             Instant Verification System
           </p>
         </header>
@@ -65,31 +67,30 @@ function App() {
           loading={loading}
         />
 
-        <p className="text-[9px] text-slate-400 text-center mt-3 font-medium leading-tight">
-          Securely verify companies against<br />
-          TML, Good Listed, NTML, and Delisted
+        <p className="text-xs text-slate-500 dark:text-slate-400 text-center mt-4 leading-relaxed">
+          Verify companies across databases
         </p>
 
         {hasSearched && results.length > 0 && !selectedCompany && (
           <button
             onClick={handleClearCacheAndSearch}
-            className="mt-4 w-full text-[9px] font-bold text-slate-300 hover:text-blue-500 flex items-center justify-center gap-1 transition-colors uppercase tracking-tighter"
+            className="mt-4 w-full text-xs font-semibold text-slate-400 hover:text-blue-600 flex items-center justify-center gap-2 transition-all hover:gap-3 py-2"
           >
-            🔄 Refresh Database
+            <span className="text-base">🔄</span> Refresh Database
           </button>
         )}
 
         <div className="mt-4 relative">
           {loading && (
-            <div className="flex flex-col items-center py-6">
-              <div className="w-4 h-4 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-2"></div>
-              <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Searching</span>
+            <div className="flex flex-col items-center py-8">
+              <div className="w-8 h-8 border-3 border-blue-500/20 border-t-blue-600 rounded-full animate-spin mb-3"></div>
+              <span className="text-sm font-semibold text-slate-500 tracking-wide">Searching...</span>
             </div>
           )}
 
           {!loading && hasSearched && error && (
-            <div className="bg-red-50 dark:bg-red-950/10 border border-red-100 rounded-lg p-3 text-center">
-              <p className="text-red-600 text-[9px] font-bold">{error}</p>
+            <div className="bg-red-50 dark:bg-red-950/10 border border-red-200 dark:border-red-800 rounded-xl p-4 text-center">
+              <p className="text-red-600 dark:text-red-400 text-sm font-semibold">{error}</p>
             </div>
           )}
 

@@ -32,19 +32,19 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <div className="relative w-full font-sans">
-      <div className="relative flex items-center bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-slate-200 dark:border-slate-800">
-        <div className="pl-3 text-slate-400">
+      <div className="relative flex items-center bg-slate-50 dark:bg-slate-800/50 rounded-xl shadow-sm border-2 border-slate-200 dark:border-slate-700 focus-within:border-blue-500 dark:focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all">
+        <div className="pl-4 text-slate-400">
           {loading ? (
-            <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-500" />
+            <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
           ) : (
-            <Search className="w-3.5 h-3.5" />
+            <Search className="w-5 h-5" />
           )}
         </div>
         <input
           ref={inputRef}
           type="text"
-          className="w-full bg-transparent p-2 text-[12px] text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none font-medium"
-          placeholder="Search company name..."
+          className="w-full bg-transparent px-3 py-3.5 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none font-medium"
+          placeholder="Enter company name..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -54,9 +54,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           <button
             type="button"
             onClick={handleClear}
-            className="p-1 mr-1 text-slate-400 hover:text-red-500 transition-all"
+            className="p-2 mr-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-all"
+            aria-label="Clear search"
           >
-            <X className="w-3.5 h-3.5" />
+            <X className="w-4 h-4" />
           </button>
         )}
       </div>
