@@ -14,7 +14,7 @@ const SuggestionList: React.FC<SuggestionListProps> = ({ results, onSelect }) =>
           Found {results.length} possible matches:
         </p>
       </div>
-      
+
       <div className="divide-y divide-gray-100 max-h-[60vh] overflow-y-auto">
         {results.map((item) => (
           <button
@@ -30,11 +30,11 @@ const SuggestionList: React.FC<SuggestionListProps> = ({ results, onSelect }) =>
                 Source: {item.ui_source_id}
               </p>
             </div>
-            
+
             <div className="flex-shrink-0">
-              {item.ui_priority === 1 && <span className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded border border-red-200">DELISTED</span>}
-              {item.ui_priority === 2 && <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-bold rounded border border-green-200">TML</span>}
-              {item.ui_priority === 3 && <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded border border-blue-200">GOOD</span>}
+              {item.ui_type === 'DELISTED' && <span className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded border border-red-200">DELISTED</span>}
+              {item.ui_type === 'TML' && <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-bold rounded border border-green-200">TML</span>}
+              {item.ui_type === 'GOOD' && <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded border border-blue-200">GOOD</span>}
             </div>
           </button>
         ))}
