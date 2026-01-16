@@ -106,6 +106,71 @@ const CompanyDetailsCard: React.FC<CompanyDetailsCardProps> = ({ company, hasCro
                 <span className="font-bold">{company.legal_status}</span>
               </div>
             )}
+            {company.group_name && (
+              <div className="flex justify-between border-b border-gray-200 pb-2">
+                <span className="text-gray-500">Group Name:</span>
+                <span className="font-bold">{company.group_name}</span>
+              </div>
+            )}
+            {company.category && (
+              <div className="flex justify-between border-b border-gray-200 pb-2">
+                <span className="text-gray-500">Category:</span>
+                <span className="font-bold">{company.category}</span>
+              </div>
+            )}
+            {company.industry && (
+              <div className="flex justify-between border-b border-gray-200 pb-2">
+                <span className="text-gray-500">Industry:</span>
+                <span className="font-bold">{company.industry}</span>
+              </div>
+            )}
+            {company.emirate && (
+              <div className="flex justify-between border-b border-gray-200 pb-2">
+                <span className="text-gray-500">Emirate:</span>
+                <span className="font-bold">{company.emirate}</span>
+              </div>
+            )}
+            {company.establishment_date && (
+              <div className="flex justify-between border-b border-gray-200 pb-2">
+                <span className="text-gray-500">Est. Date:</span>
+                <span className="font-bold">{company.establishment_date}</span>
+              </div>
+            )}
+            {company.po_box && (
+              <div className="flex justify-between border-b border-gray-200 pb-2">
+                <span className="text-gray-500">PO Box:</span>
+                <span className="font-bold">{company.po_box}</span>
+              </div>
+            )}
+            {company.employer_id && (
+              <div className="flex justify-between border-b border-gray-200 pb-2">
+                <span className="text-gray-500">Employer ID:</span>
+                <span className="font-bold">{company.employer_id}</span>
+              </div>
+            )}
+            {/* Show raw status if it exists and adds value */}
+            {company.status && company.status !== company.ui_label && (
+              <div className="flex justify-between border-b border-gray-200 pb-2">
+                <span className="text-gray-500">Status Details:</span>
+                <span className="font-bold">{company.status}</span>
+              </div>
+            )}
+            {company.reason && (
+              <div className="flex flex-col border-b border-gray-200 pb-2">
+                <span className="text-gray-500 text-xs mb-1">Reason / Notes:</span>
+                <span className="font-bold text-red-600 bg-red-50 p-2 rounded text-xs leading-relaxed">
+                  {company.reason}
+                </span>
+              </div>
+            )}
+            {company.comments && (
+              <div className="flex flex-col border-b border-gray-200 pb-2">
+                <span className="text-gray-500 text-xs mb-1">Comments:</span>
+                <span className="font-medium italic text-gray-700 bg-gray-50 p-2 rounded text-xs">
+                  {company.comments}
+                </span>
+              </div>
+            )}
             <div className="flex justify-between border-b border-gray-200 pb-2">
               <span className="text-gray-500">Source Table:</span>
               <span className="font-mono text-xs text-gray-400">{company.ui_source_id}</span>
