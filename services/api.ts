@@ -245,7 +245,8 @@ export async function searchCompanies(query: string, forceRefresh = false): Prom
     try {
       // Supabase REST API requires double quotes around column names with special chars
       // Format: "Column Name"=ilike.*value*
-      const url = `${SUPABASE_URL}/rest/v1/${config.tableName}?select=*&limit=30`
+      const searchFilter = `"${config.columnName}"=ilike.*${cleanQuery}*`
+      const url = `${SUPABASE_URL}/rest/v1/${config.tableName}?${searchFilter}&select=*&limit=100`
 
       console.log(`[v0] Fetching from ${config.tableName}, column: ${config.columnName}`)
 
