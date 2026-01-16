@@ -8,9 +8,9 @@ interface SuggestionListProps {
 
 const SuggestionList: React.FC<SuggestionListProps> = ({ results, onSelect }) => {
   return (
-    <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden w-full mb-6 animate-scale-in">
-      <div className="bg-gray-100 px-4 py-3 border-b border-gray-200">
-        <p className="text-sm font-bold text-gray-700">
+    <div className="bg-white rounded-2xl shadow-[0_15px_50px_rgb(0,0,0,0.12)] border border-gray-100 overflow-hidden w-full mb-10 animate-scale-in">
+      <div className="bg-gray-50/50 px-5 py-4 border-b border-gray-100">
+        <p className="text-sm font-black text-gray-500 uppercase tracking-widest">
           Found {results.length} possible matches:
         </p>
       </div>

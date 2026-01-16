@@ -71,7 +71,7 @@ const CompanyDetailsCard: React.FC<CompanyDetailsCardProps> = ({ company, hasCro
         <span>←</span> Back to results
       </button>
 
-      <div className={`w-full ${theme.bg} border ${theme.border} rounded-xl shadow-md overflow-hidden`}>
+      <div className={`w-full ${theme.bg} border border-white/50 rounded-2xl shadow-[0_20px_60px_rgb(0,0,0,0.15)] overflow-hidden`}>
         {/* Header */}
         <div className={`${theme.header} px-4 py-3 flex justify-between items-center`}>
           <h2 className="text-white font-bold text-lg">{theme.title}</h2>

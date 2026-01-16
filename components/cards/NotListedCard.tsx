@@ -6,7 +6,7 @@ interface NotListedCardProps {
 
 const NotListedCard: React.FC<NotListedCardProps> = ({ query }) => {
   return (
-    <div className="w-full bg-white border-2 border-dashed border-red-300 rounded-xl p-6 text-center animate-fade-in shadow-sm">
+    <div className="w-full bg-white border border-red-100 rounded-2xl p-8 text-center animate-fade-in shadow-[0_20px_60px_rgb(220,38,38,0.08)]">
       <div className="inline-block p-4 bg-red-50 rounded-full mb-4">
         <span className="text-4xl">❓</span>
       </div>
