@@ -6,27 +6,27 @@ interface NotListedCardProps {
 
 const NotListedCard: React.FC<NotListedCardProps> = ({ query }) => {
   return (
-    <div className="w-full bg-white border border-red-100 rounded-2xl p-8 text-center animate-fade-in shadow-[0_20px_60px_rgb(220,38,38,0.08)]">
-      <div className="inline-block p-4 bg-red-50 rounded-full mb-4">
-        <span className="text-4xl">❓</span>
+    <div className="w-full bg-white border border-red-100 rounded-2xl p-6 text-center animate-fade-in shadow-xl">
+      <div className="inline-block p-3 bg-red-50 rounded-full mb-4">
+        <span className="text-3xl">❓</span>
       </div>
 
-      <h2 className="text-xl font-bold text-red-700">Non-Listed Company (NTML)</h2>
+      <h2 className="text-lg font-bold text-red-700">Non-Listed Company (NTML)</h2>
 
-      <div className="mt-4 bg-red-50 p-4 rounded-lg border border-red-100 text-left">
-        <p className="text-gray-600 text-sm mb-1">Searched for:</p>
-        <p className="font-bold text-gray-900 mb-2 break-all">"{query}"</p>
+      <div className="mt-4 bg-red-50 p-3 rounded-lg border border-red-100 text-left">
+        <p className="text-gray-600 text-xs mb-1">Searched for:</p>
+        <p className="font-bold text-gray-900 mb-2 break-all text-sm">"{query}"</p>
 
         <div className="border-t border-red-200 pt-2 mt-2">
-          <span className="text-red-600 font-bold bg-red-100 px-2 py-1 rounded text-xs uppercase">Not Found</span>
-          <p className="text-red-700 text-sm mt-3 leading-relaxed">
+          <span className="text-red-600 font-bold bg-red-100 px-2 py-0.5 rounded text-[10px] uppercase">Not Found</span>
+          <p className="text-red-700 text-xs mt-3 leading-relaxed">
             No match is found in any lists. This company is not present in our Delisted, TML (Target Market List), or
             Good List databases.
           </p>
         </div>
       </div>
 
-      <div className="mt-6 text-left text-sm text-gray-600 bg-gray-50 p-4 rounded-lg">
+      <div className="mt-5 text-left text-xs text-gray-600 bg-gray-50 p-4 rounded-lg">
         <p className="font-bold mb-2">Recommended Actions:</p>
         <ul className="list-none space-y-1">
           <li className="flex items-center gap-2">

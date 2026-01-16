@@ -66,124 +66,118 @@ const CompanyDetailsCard: React.FC<CompanyDetailsCardProps> = ({ company, hasCro
     <div className="animate-fade-in w-full">
       <button
         onClick={onBack}
-        className="mb-4 px-3 py-2 bg-white rounded-lg border border-gray-200 text-sm text-blue-600 font-bold flex items-center gap-2 hover:bg-gray-50 shadow-sm transition-colors"
+        className="mb-3 px-2 py-1.5 bg-white rounded-xl border border-gray-200 text-xs text-blue-600 font-bold flex items-center gap-1.5 hover:bg-gray-50 shadow-sm transition-colors"
       >
         <span>←</span> Back to results
       </button>
 
-      <div className={`w-full ${theme.bg} border border-white/50 rounded-2xl shadow-[0_20px_60px_rgb(0,0,0,0.15)] overflow-hidden`}>
+      <div className={`w-full ${theme.bg} border border-slate-100 dark:border-slate-800 rounded-2xl shadow-xl overflow-hidden`}>
         {/* Header */}
-        <div className={`${theme.header} px-4 py-3 flex justify-between items-center`}>
-          <h2 className="text-white font-bold text-lg">{theme.title}</h2>
-          <span className={`bg-white ${theme.badgeText} text-xs font-black px-2 py-1 rounded uppercase`}>
+        <div className={`${theme.header} px-3 py-2 flex justify-between items-center`}>
+          <h2 className="text-white font-bold text-base">{theme.title}</h2>
+          <span className={`bg-white ${theme.badgeText} text-[10px] font-black px-1.5 py-0.5 rounded uppercase`}>
             {theme.badgeLabel}
           </span>
         </div>
 
         {/* Content */}
-        <div className="p-5">
-          <p className="text-xs text-gray-500 uppercase font-bold tracking-wide mb-1">Company Name</p>
-          <h1 className="text-2xl font-black text-gray-900 leading-tight mb-4 break-words">{company.displayName}</h1>
+        <div className="p-4">
+          <p className="text-[10px] text-gray-500 uppercase font-bold tracking-wide mb-0.5">Company Name</p>
+          <h1 className="text-xl font-black text-gray-900 leading-tight mb-3 break-words">{company.displayName}</h1>
 
-          <div className={`bg-white p-3 rounded-lg border ${theme.border} flex items-start gap-3 mb-4`}>
-            <span className="text-2xl">{theme.icon}</span>
+          <div className={`bg-white p-2.5 rounded-lg border ${theme.border} flex items-start gap-2.5 mb-3`}>
+            <span className="text-xl">{theme.icon}</span>
             <div>
-              <p className="text-sm text-gray-500">Status:</p>
-              <p className={`font-bold ${theme.textMain} text-base`}>{company.ui_label}</p>
+              <p className="text-xs text-gray-500">Status:</p>
+              <p className={`font-bold ${theme.textMain} text-sm`}>{company.ui_label}</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-3 text-sm">
+          <div className="grid grid-cols-1 gap-2 text-xs">
             {company.employer_code && (
-              <div className="flex justify-between border-b border-gray-200 pb-2">
+              <div className="flex justify-between border-b border-gray-200 pb-1.5">
                 <span className="text-gray-500">Employer Code:</span>
                 <span className="font-mono font-bold">{company.employer_code}</span>
               </div>
             )}
             {company.legal_status && (
-              <div className="flex justify-between border-b border-gray-200 pb-2">
+              <div className="flex justify-between border-b border-gray-200 pb-1.5">
                 <span className="text-gray-500">Legal Status:</span>
                 <span className="font-bold">{company.legal_status}</span>
               </div>
             )}
             {company.group_name && (
-              <div className="flex justify-between border-b border-gray-200 pb-2">
+              <div className="flex justify-between border-b border-gray-200 pb-1.5">
                 <span className="text-gray-500">Group Name:</span>
                 <span className="font-bold">{company.group_name}</span>
               </div>
             )}
             {company.category && (
-              <div className="flex justify-between border-b border-gray-200 pb-2">
+              <div className="flex justify-between border-b border-gray-200 pb-1.5">
                 <span className="text-gray-500">Category:</span>
                 <span className="font-bold">{company.category}</span>
               </div>
             )}
             {company.industry && (
-              <div className="flex justify-between border-b border-gray-200 pb-2">
+              <div className="flex justify-between border-b border-gray-200 pb-1.5">
                 <span className="text-gray-500">Industry:</span>
                 <span className="font-bold">{company.industry}</span>
               </div>
             )}
             {company.emirate && (
-              <div className="flex justify-between border-b border-gray-200 pb-2">
+              <div className="flex justify-between border-b border-gray-200 pb-1.5">
                 <span className="text-gray-500">Emirate:</span>
                 <span className="font-bold">{company.emirate}</span>
               </div>
             )}
             {company.establishment_date && (
-              <div className="flex justify-between border-b border-gray-200 pb-2">
+              <div className="flex justify-between border-b border-gray-200 pb-1.5">
                 <span className="text-gray-500">Est. Date:</span>
                 <span className="font-bold">{company.establishment_date}</span>
               </div>
             )}
             {company.po_box && (
-              <div className="flex justify-between border-b border-gray-200 pb-2">
+              <div className="flex justify-between border-b border-gray-200 pb-1.5">
                 <span className="text-gray-500">PO Box:</span>
                 <span className="font-bold">{company.po_box}</span>
               </div>
             )}
             {company.employer_id && (
-              <div className="flex justify-between border-b border-gray-200 pb-2">
+              <div className="flex justify-between border-b border-gray-200 pb-1.5">
                 <span className="text-gray-500">Employer ID:</span>
                 <span className="font-bold">{company.employer_id}</span>
               </div>
             )}
             {/* Show raw status if it exists and adds value */}
             {company.status && company.status !== company.ui_label && (
-              <div className="flex justify-between border-b border-gray-200 pb-2">
+              <div className="flex justify-between border-b border-gray-200 pb-1.5">
                 <span className="text-gray-500">Status Details:</span>
                 <span className="font-bold">{company.status}</span>
               </div>
             )}
             {company.reason && (
-              <div className="flex flex-col border-b border-gray-200 pb-2">
-                <span className="text-gray-500 text-xs mb-1">Reason / Notes:</span>
-                <span className="font-bold text-red-600 bg-red-50 p-2 rounded text-xs leading-relaxed">
+              <div className="flex flex-col border-b border-gray-200 pb-1.5">
+                <span className="text-gray-500 text-[10px] mb-0.5">Reason / Notes:</span>
+                <span className="font-bold text-red-600 bg-red-50 p-1.5 rounded text-[10px] leading-relaxed">
                   {company.reason}
                 </span>
               </div>
             )}
             {company.comments && (
-              <div className="flex flex-col border-b border-gray-200 pb-2">
-                <span className="text-gray-500 text-xs mb-1">Comments:</span>
-                <span className="font-medium italic text-gray-700 bg-gray-50 p-2 rounded text-xs">
+              <div className="flex flex-col border-b border-gray-200 pb-1.5">
+                <span className="text-gray-500 text-[10px] mb-0.5">Comments:</span>
+                <span className="font-medium italic text-gray-700 bg-gray-50 p-1.5 rounded text-[10px]">
                   {company.comments}
                 </span>
               </div>
             )}
-            <div className="flex justify-between border-b border-gray-200 pb-2">
+            <div className="flex justify-between border-b border-gray-200 pb-1.5">
               <span className="text-gray-500">Source Table:</span>
-              <span className="font-mono text-xs text-gray-400">{company.ui_source_id}</span>
+              <span className="font-mono text-[10px] text-gray-400">{company.ui_source_id}</span>
             </div>
           </div>
 
-          {/* WARNING NOTE (Important!) */}
-          {hasCrossReference && (
-            <div className="mt-4 p-3 bg-yellow-50 border-l-4 border-yellow-400 text-sm text-yellow-900 rounded-r shadow-sm">
-              <strong>⚠️ Warning:</strong> This entity also appears in other lists. The current status ({company.ui_type}
-              ) takes priority as it represents higher risk/priority information.
-            </div>
-          )}
+          {/* WARNING NOTE REMOVED */}
         </div>
       </div>
     </div>

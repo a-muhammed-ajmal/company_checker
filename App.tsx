@@ -45,16 +45,16 @@ function App() {
       )}
 
       {/* CONTENT BOX */}
-      <div className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 p-6 mt-8">
+      <div className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 p-5 mt-6">
 
-        <header className="flex flex-col items-center mb-8 pb-6 border-b border-slate-100 dark:border-slate-800">
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30">
-            <ShieldCheck className="w-8 h-8 text-white" strokeWidth={2.5} />
+        <header className="flex flex-col items-center mb-6 pb-5 border-b border-slate-100 dark:border-slate-800">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-3 shadow-lg shadow-blue-500/30">
+            <ShieldCheck className="w-7 h-7 text-white" strokeWidth={2.5} />
           </div>
-          <h1 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2">
+          <h1 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight mb-1.5">
             Company Checker
           </h1>
-          <p className="text-sm text-slate-600 dark:text-slate-400 font-semibold">
+          <p className="text-xs text-slate-600 dark:text-slate-400 font-semibold">
             Instant Verification System
           </p>
         </header>

@@ -202,14 +202,9 @@ function handleDuplicates(results: Company[]): Company[] {
       const hasGoodOrTML = companies.some((c) => c.ui_type === "GOOD" || c.ui_type === "TML")
 
       if (hasDelisted && hasGoodOrTML) {
-        // Delisted always appears first due to priority sorting
-        const delisted = companies.filter((c) => c.ui_type === "DELISTED")
-        const goodOrTML = companies.filter((c) => c.ui_type === "GOOD" || c.ui_type === "TML")
-
-        // Add delisted entries first
-        deduplicatedResults.push(...delisted)
-        // Then add good/TML entries
-        deduplicatedResults.push(...goodOrTML)
+        // Sort by priority to determine order (Delisted only first if exact match/high priority)
+        companies.sort((a, b) => a.ui_priority - b.ui_priority)
+        deduplicatedResults.push(...companies)
       } else {
         // No critical collision - just add all variants
         deduplicatedResults.push(...companies)
@@ -276,15 +271,25 @@ export async function searchCompanies(query: string, forceRefresh = false): Prom
 
       return filteredData.map((item: any) => {
         const name = item[config.columnName] || ""
+        const matchScore = calculateMatchScore(cleanQuery, name)
+        let dynamicPriority = config.priority
+
+        // Dynamic Priority Logic:
+        // 1. Exact Match DELISTED -> Priority 1 (Highest)
+        // 2. Partial Match DELISTED -> Priority 99 (Lowest)
+        // 3. TML/GOOD -> Keep original priority (Medium)
+        if (config.type === "DELISTED") {
+          dynamicPriority = matchScore === 100 ? 1 : 99
+        }
 
         return {
           ...item,
           displayName: name,
           ui_type: config.type,
-          ui_priority: config.priority,
+          ui_priority: dynamicPriority,
           ui_source_id: config.tableName,
           ui_label: config.label,
-          match_score: calculateMatchScore(cleanQuery, name),
+          match_score: matchScore,
         } as Company
       })
     } catch (error) {

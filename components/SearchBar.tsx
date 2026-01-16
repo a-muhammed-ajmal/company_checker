@@ -31,11 +31,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <div className="relative w-full font-sans">
-      <div className="relative flex items-center bg-slate-50 dark:bg-slate-800/50 rounded-xl shadow-sm border-2 border-slate-200 dark:border-slate-700 focus-within:border-blue-500 dark:focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all">
+    <div className="relative w-full font-sans max-w-sm mx-auto">
+      <div className="relative flex items-center bg-slate-50 dark:bg-slate-900/50 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 focus-within:border-blue-500 dark:focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all duration-200 overflow-hidden">
         <div className="pl-4 text-slate-400">
           {loading ? (
-            <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
+            <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
           ) : (
             <Search className="w-5 h-5" />
           )}
@@ -43,7 +43,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         <input
           ref={inputRef}
           type="text"
-          className="w-full bg-transparent px-3 py-3.5 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none font-medium"
+          className="w-full bg-transparent px-3 py-4 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none font-medium h-12"
           placeholder="Enter company name..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -54,7 +54,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           <button
             type="button"
             onClick={handleClear}
-            className="p-2 mr-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-all"
+            className="p-2 mr-2 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors"
             aria-label="Clear search"
           >
             <X className="w-4 h-4" />
