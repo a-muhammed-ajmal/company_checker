@@ -31,19 +31,19 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <div className="relative w-full font-['Figtree']">
-      <div className="relative flex items-center bg-white dark:bg-slate-900 rounded-lg shadow-md border border-slate-200 dark:border-slate-800">
+    <div className="relative w-full font-sans">
+      <div className="relative flex items-center bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-slate-200 dark:border-slate-800">
         <div className="pl-3 text-slate-400">
           {loading ? (
-            <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
+            <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-500" />
           ) : (
-            <Search className="w-4 h-4" />
+            <Search className="w-3.5 h-3.5" />
           )}
         </div>
         <input
           ref={inputRef}
           type="text"
-          className="w-full bg-transparent p-2.5 text-[13px] text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none font-medium"
+          className="w-full bg-transparent p-2 text-[12px] text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none font-medium"
           placeholder="Search company name..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -54,9 +54,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           <button
             type="button"
             onClick={handleClear}
-            className="p-1.5 mr-1 text-slate-400 hover:text-red-500 rounded-full transition-all"
+            className="p-1 mr-1 text-slate-400 hover:text-red-500 transition-all"
           >
-            <X className="w-4 h-4" />
+            <X className="w-3.5 h-3.5" />
           </button>
         )}
       </div>

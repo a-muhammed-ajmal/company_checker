@@ -27,16 +27,17 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-slate-950 flex flex-col items-center justify-start p-4 font-['Figtree']">
+    <div className="min-h-screen bg-[#F1F5F9] dark:bg-slate-950 flex flex-col items-center justify-start p-4 font-sans">
 
-      <div className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 dark:border-slate-800 p-6 mt-6">
+      {/* CONTENT BOX */}
+      <div className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 p-6 mt-8">
 
-        <header className="flex flex-col items-center mb-5">
-          <ShieldCheck className="w-8 h-8 text-blue-600 mb-2" />
+        <header className="flex flex-col items-center mb-6">
+          <ShieldCheck className="w-7 h-7 text-blue-600 mb-2" />
           <h1 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
             Company Checker
           </h1>
-          <p className="text-[11px] text-slate-500 font-medium uppercase tracking-wider">
+          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
             Instant Verification System
           </p>
         </header>
@@ -49,7 +50,7 @@ function App() {
           loading={loading}
         />
 
-        <p className="text-[10px] text-slate-400 text-center mt-3 px-4 leading-normal">
+        <p className="text-[9px] text-slate-400 text-center mt-3 font-medium leading-tight">
           Securely verify companies against<br />
           TML, Good Listed, NTML, and Delisted
         </p>
@@ -57,23 +58,23 @@ function App() {
         {hasSearched && results.length > 0 && !selectedCompany && (
           <button
             onClick={handleClearCacheAndSearch}
-            className="mt-4 w-full text-[9px] font-bold text-slate-400 hover:text-blue-600 flex items-center justify-center gap-1 transition-colors"
+            className="mt-4 w-full text-[9px] font-bold text-slate-300 hover:text-blue-500 flex items-center justify-center gap-1 transition-colors uppercase tracking-tighter"
           >
-            🔄 Refresh from Database
+            🔄 Refresh Database
           </button>
         )}
 
-        <div className="mt-5 relative min-h-[50px]">
+        <div className="mt-4 relative">
           {loading && (
-            <div className="flex flex-col items-center py-4">
-              <div className="w-5 h-5 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-2"></div>
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Searching...</span>
+            <div className="flex flex-col items-center py-6">
+              <div className="w-4 h-4 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-2"></div>
+              <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Searching</span>
             </div>
           )}
 
           {!loading && hasSearched && error && (
-            <div className="bg-red-50 dark:bg-red-950/20 border border-red-100 rounded-xl p-4 text-center">
-              <p className="text-red-600 text-[10px] font-bold">{error}</p>
+            <div className="bg-red-50 dark:bg-red-950/10 border border-red-100 rounded-lg p-3 text-center">
+              <p className="text-red-600 text-[9px] font-bold">{error}</p>
             </div>
           )}
 
