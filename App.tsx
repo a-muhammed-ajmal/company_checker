@@ -4,7 +4,6 @@ import { useState } from "react"
 import SuggestionList from "./components/SuggestionList"
 import CompanyDetailsCard from "./components/cards/CompanyDetailsCard"
 import NotListedCard from "./components/cards/NotListedCard"
-import DatabaseDiagnostic from "./components/DatabaseDiagnostic"
 import { useSearch } from "./hooks/useSearch"
 import type { Company } from "./types"
 import { searchCache } from "./utils/cache"
@@ -35,7 +34,7 @@ function App() {
         <p className="text-gray-500 text-sm mt-1">Instant Verification System</p>
       </div>
 
-      <DatabaseDiagnostic />
+
 
       {/* SECTION 2: SEARCH BAR */}
       <div className="w-full max-w-lg relative mb-6 z-20">
