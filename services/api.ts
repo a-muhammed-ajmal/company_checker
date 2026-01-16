@@ -243,9 +243,9 @@ export async function searchCompanies(query: string, forceRefresh = false): Prom
   // Search ALL tables in parallel
   const searchPromises = TABLE_CONFIGS.map(async (config) => {
     try {
-      // Supabase REST API requires double quotes around column names with special chars
-      // Format: "Column Name"=ilike.*value*
-      const searchFilter = `"${config.columnName}"=ilike.*${cleanQuery}*`
+      // Supabase REST API: Column names with spaces do NOT need quotes in URL parameters
+      // Format: Column Name=ilike.*value*
+      const searchFilter = `${config.columnName}=ilike.*${cleanQuery}*`
       const url = `${SUPABASE_URL}/rest/v1/${config.tableName}?${searchFilter}&select=*&limit=100`
 
       console.log(`[v0] Fetching from ${config.tableName}, column: ${config.columnName}`)
