@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { ShieldCheck } from "lucide-react"
 import SuggestionList from "./components/SuggestionList"
 import CompanyDetailsCard from "./components/cards/CompanyDetailsCard"
 import NotListedCard from "./components/cards/NotListedCard"
@@ -26,62 +27,53 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-start p-4 sm:p-6 font-sans">
-      {/* MAIN CONTENT BOX */}
-      <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 p-5 sm:p-8 mt-4 sm:mt-10 transition-all">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-slate-950 flex flex-col items-center justify-start p-4 font-['Figtree']">
 
-        {/* HEADER SECTION */}
-        <header className="text-center mb-6">
-          <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight mb-2">
+      <div className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 dark:border-slate-800 p-6 mt-6">
+
+        <header className="flex flex-col items-center mb-5">
+          <ShieldCheck className="w-8 h-8 text-blue-600 mb-2" />
+          <h1 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
             Company Checker
           </h1>
-          <p className="text-[13px] sm:text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed px-2">
-            Securely verify companies against<br />
-            <span className="text-blue-600 dark:text-blue-400 font-bold">TML, Good Listed, NTML, and Delisted</span>
+          <p className="text-[11px] text-slate-500 font-medium uppercase tracking-wider">
+            Instant Verification System
           </p>
         </header>
 
-        {/* SEARCH SECTION */}
-        <div className="mb-4">
-          <SearchBar
-            query={query}
-            setQuery={setQuery}
-            onSearch={handleSearch}
-            onClear={handleClear}
-            loading={loading}
-          />
-        </div>
+        <SearchBar
+          query={query}
+          setQuery={setQuery}
+          onSearch={handleSearch}
+          onClear={handleClear}
+          loading={loading}
+        />
 
-        {/* REFRESH ACTION */}
+        <p className="text-[10px] text-slate-400 text-center mt-3 px-4 leading-normal">
+          Securely verify companies against<br />
+          TML, Good Listed, NTML, and Delisted
+        </p>
+
         {hasSearched && results.length > 0 && !selectedCompany && (
           <button
             onClick={handleClearCacheAndSearch}
-            className="mb-4 w-full text-[10px] uppercase tracking-widest text-slate-400 hover:text-blue-600 flex items-center justify-center gap-1.5 transition-colors font-bold"
+            className="mt-4 w-full text-[9px] font-bold text-slate-400 hover:text-blue-600 flex items-center justify-center gap-1 transition-colors"
           >
-            <span>🔄</span> Refresh from Database
+            🔄 Refresh from Database
           </button>
         )}
 
-        {/* RESULTS AREA */}
-        <div className="relative min-h-[100px] transition-all duration-300">
+        <div className="mt-5 relative min-h-[50px]">
           {loading && (
-            <div className="flex flex-col items-center justify-center py-8 text-slate-400">
-              <div className="w-8 h-8 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-3"></div>
-              <span className="text-xs font-bold animate-pulse uppercase tracking-tighter">Searching Database...</span>
+            <div className="flex flex-col items-center py-4">
+              <div className="w-5 h-5 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-2"></div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">Searching...</span>
             </div>
           )}
 
           {!loading && hasSearched && error && (
-            <div className="bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/50 rounded-2xl p-5 text-center">
-              <div className="text-2xl mb-2">⚠️</div>
-              <h3 className="text-red-800 dark:text-red-400 font-bold text-sm mb-1">Search Error</h3>
-              <p className="text-red-600 dark:text-red-500 text-[11px] mb-4">{error}</p>
-              <button
-                onClick={() => handleSearch()}
-                className="bg-red-600 text-white text-xs px-5 py-2 rounded-lg font-bold hover:bg-red-700 transition-all"
-              >
-                Try Again
-              </button>
+            <div className="bg-red-50 dark:bg-red-950/20 border border-red-100 rounded-xl p-4 text-center">
+              <p className="text-red-600 text-[10px] font-bold">{error}</p>
             </div>
           )}
 
@@ -103,27 +95,19 @@ function App() {
         </div>
       </div>
 
-      {/* FOOTER SECTION */}
-      <footer className="mt-8 mb-6 flex flex-col items-center gap-2 text-center">
-        <p className="text-slate-500 dark:text-slate-400 text-[11px] font-black tracking-widest uppercase">
+      <footer className="mt-auto py-6 flex flex-col items-center gap-1 text-center opacity-10 select-none">
+        <p className="text-slate-500 text-[9px] font-bold tracking-[0.2em]">
           DATABASE UPDATED ON 15TH JANUARY 2026
         </p>
-        <div className="flex flex-col gap-1">
-          <p className="text-slate-400 dark:text-slate-500 text-[10px] font-medium">
-            © 2026 Verification System by{" "}
-            <a
-              href="https://www.linkedin.com/in/muhammed-ajmal-consultant/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:underline font-bold"
-            >
-              Muhammed Ajmal
-            </a>
-          </p>
-          <p className="text-slate-300 dark:text-slate-600 text-[9px] font-bold uppercase tracking-tighter">
-            © 2024 Compliance Verification System
-          </p>
-        </div>
+        <p className="text-slate-500 text-[9px] font-medium">
+          © 2026 Verification System by{" "}
+          <a
+            href="https://www.linkedin.com/in/muhammed-ajmal-consultant/"
+            className="text-inherit no-underline"
+          >
+            Muhammed Ajmal
+          </a>
+        </p>
       </footer>
     </div>
   )
