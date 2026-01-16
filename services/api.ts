@@ -2,6 +2,17 @@ import { SUPABASE_ANON_KEY, SUPABASE_URL, hasSupabaseCredentials } from "../cons
 import type { Company, CompanySource, UIType } from "../types"
 import { searchCache } from "../utils/cache"
 
+/**
+ * Sanitizes user input to prevent injection attacks
+ */
+function sanitizeInput(input: string): string {
+  return input
+    .replace(/[<>"'`]/g, "") // Remove potentially dangerous characters
+    .replace(/[\r\n]/g, "") // Remove newlines
+    .trim()
+    .slice(0, 100) // Limit length
+}
+
 // ==========================================
 // 1. CONFIGURATION
 // Corrected Column Names based on your DB schema
@@ -195,8 +206,6 @@ function handleDuplicates(results: Company[]): Company[] {
         const delisted = companies.filter((c) => c.ui_type === "DELISTED")
         const goodOrTML = companies.filter((c) => c.ui_type === "GOOD" || c.ui_type === "TML")
 
-        console.log(`[v0] Collision detected for "${companies[0].displayName}" - showing DELISTED first, then GOOD/TML`)
-
         // Add delisted entries first
         deduplicatedResults.push(...delisted)
         // Then add good/TML entries
@@ -216,34 +225,23 @@ function handleDuplicates(results: Company[]): Company[] {
 // ==========================================
 
 export async function searchCompanies(query: string, forceRefresh = false): Promise<Company[]> {
-  const cleanQuery = query.trim()
+  // Sanitize input to prevent injection attacks
+  const cleanQuery = sanitizeInput(query)
   if (!cleanQuery) return []
 
   const cacheKey = `search_${cleanQuery.toLowerCase()}`
 
+  // Check cache unless force refresh requested
   if (!forceRefresh) {
     const cached = searchCache.get<Company[]>(cacheKey)
     if (cached) {
-      console.log("[v0] Cache hit for query:", cleanQuery)
-      console.log(
-        "[v0] Cached results:",
-        cached.map((c) => ({ name: c.displayName, type: c.ui_type, priority: c.ui_priority })),
-      )
       return cached
     }
-  } else {
-    console.log("[v0] Force refresh - bypassing cache for query:", cleanQuery)
   }
 
   if (!hasSupabaseCredentials()) {
-    console.error(
-      "[v0] Missing credentials - URL:",
-      SUPABASE_URL ? "SET" : "MISSING",
-      "KEY:",
-      SUPABASE_ANON_KEY ? "SET" : "MISSING",
-    )
     throw new Error(
-      "Supabase credentials not configured. Please add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in the Vars section.",
+      "Supabase credentials not configured. Please check your environment variables.",
     )
   }
 
@@ -253,9 +251,6 @@ export async function searchCompanies(query: string, forceRefresh = false): Prom
     "Content-Type": "application/json",
   }
 
-  console.log("[v0] Searching database for:", cleanQuery)
-  console.log("[v0] Using Supabase URL:", SUPABASE_URL)
-
   // Search ALL tables in parallel
   const searchPromises = TABLE_CONFIGS.map(async (config) => {
     try {
@@ -264,23 +259,13 @@ export async function searchCompanies(query: string, forceRefresh = false): Prom
       const searchFilter = `${config.columnName}=ilike.*${cleanQuery}*`
       const url = `${SUPABASE_URL}/rest/v1/${config.tableName}?${searchFilter}&select=*&limit=100`
 
-      console.log(`[v0] Fetching from ${config.tableName}, column: ${config.columnName}`)
-
       const response = await fetchWithTimeout(url, { headers }, 10000)
 
       if (!response.ok) {
-        const errorText = await response.text()
-        console.log(`[v0] Error fetching ${config.tableName}: ${response.status} ${response.statusText}`, errorText)
         return []
       }
 
       const data = await response.json()
-
-      console.log(`[v0] Raw data from ${config.tableName}: ${data.length} rows`)
-      if (data.length > 0) {
-        console.log(`[v0] Sample row keys from ${config.tableName}:`, Object.keys(data[0]))
-        console.log(`[v0] Sample row from ${config.tableName}:`, data[0])
-      }
 
       const filteredData = data.filter((item: any) => {
         const name = item[config.columnName] || ""
@@ -288,8 +273,6 @@ export async function searchCompanies(query: string, forceRefresh = false): Prom
         const score = calculateMatchScore(cleanQuery, name)
         return score >= 40
       })
-
-      console.log(`[v0] Filtered ${filteredData.length} results from ${config.tableName} for query "${cleanQuery}"`)
 
       return filteredData.map((item: any) => {
         const name = item[config.columnName] || ""
@@ -305,7 +288,7 @@ export async function searchCompanies(query: string, forceRefresh = false): Prom
         } as Company
       })
     } catch (error) {
-      console.error(`[v0] Error on ${config.tableName}`, error)
+      // Silently fail individual table queries
       return []
     }
   })
@@ -313,16 +296,7 @@ export async function searchCompanies(query: string, forceRefresh = false): Prom
   const resultsArrays = await Promise.all(searchPromises)
   const allRawResults = resultsArrays.flat()
 
-  console.log("[v0] Total raw results:", allRawResults.length)
-  console.log("[v0] Results by type:", {
-    DELISTED: allRawResults.filter((r) => r.ui_type === "DELISTED").length,
-    TML: allRawResults.filter((r) => r.ui_type === "TML").length,
-    GOOD: allRawResults.filter((r) => r.ui_type === "GOOD").length,
-  })
-
   const relevantResults = allRawResults.filter((c) => (c.match_score || 0) >= 40)
-
-  console.log("[v0] After filtering (score >= 40):", relevantResults.length)
 
   relevantResults.sort((a, b) => {
     if (a.ui_priority !== b.ui_priority) {
@@ -331,33 +305,12 @@ export async function searchCompanies(query: string, forceRefresh = false): Prom
     return (b.match_score || 0) - (a.match_score || 0)
   })
 
-  console.log(
-    "[v0] Top 5 results after sorting:",
-    relevantResults.slice(0, 5).map((r) => ({
-      name: r.displayName,
-      type: r.ui_type,
-      priority: r.ui_priority,
-      score: r.match_score,
-    })),
-  )
-
   const deduplicatedResults = handleDuplicates(relevantResults)
-
-  console.log("[v0] After deduplication:", deduplicatedResults.length)
-  console.log(
-    "[v0] Final top 5 results:",
-    deduplicatedResults.slice(0, 5).map((r) => ({
-      name: r.displayName,
-      type: r.ui_type,
-      priority: r.ui_priority,
-      score: r.match_score,
-    })),
-  )
 
   const finalResults = deduplicatedResults.slice(0, 25)
 
+  // Cache results for future requests
   searchCache.set(cacheKey, finalResults)
-  console.log("[v0] Cached results for query:", cleanQuery)
 
   return finalResults
 }
