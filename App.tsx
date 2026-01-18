@@ -70,6 +70,9 @@ function App() {
         <p className="text-xs text-slate-500 dark:text-slate-400 text-center mt-4 leading-relaxed">
           Verify companies across databases
         </p>
+        <p className="text-[11px] text-slate-400 dark:text-slate-500 text-center mt-1">
+          Database Updated On: 15th January 2026
+        </p>
 
         {hasSearched && results.length > 0 && !selectedCompany && (
           <button
@@ -112,15 +115,14 @@ function App() {
         </div>
       </div>
 
-      <footer className="mt-auto py-6 flex flex-col items-center gap-1 text-center opacity-10 select-none">
-        <p className="text-slate-500 text-[9px] font-bold tracking-[0.2em]">
-          DATABASE UPDATED ON 15TH JANUARY 2026
-        </p>
-        <p className="text-slate-500 text-[9px] font-medium">
-          © 2026 Verification System by{" "}
+      <footer className="mt-auto py-6 flex flex-col items-center gap-1 text-center opacity-40 select-none">
+        <p className="text-slate-500 text-[10px] font-medium">
+          @ 2026 Company Checker by{" "}
           <a
             href="https://www.linkedin.com/in/muhammed-ajmal-consultant/"
-            className="text-inherit no-underline"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-blue-500 transition-colors"
           >
             Muhammed Ajmal
           </a>
