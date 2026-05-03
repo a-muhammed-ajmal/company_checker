@@ -31,7 +31,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <div className="relative w-full font-sans max-w-sm mx-auto">
+    <div className="relative w-full font-sans">
       <div className="relative flex items-center bg-slate-50 dark:bg-slate-900/50 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 focus-within:border-blue-500 dark:focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all duration-200 overflow-hidden">
         <div className="pl-4 text-slate-400">
           {loading ? (
@@ -43,7 +43,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         <input
           ref={inputRef}
           type="text"
-          className="w-full bg-transparent px-3 py-4 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none font-medium h-12"
+          className="w-full bg-transparent px-3 py-4 text-sm sm:text-base text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none font-medium h-12 sm:h-14"
           placeholder="Enter company name..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}

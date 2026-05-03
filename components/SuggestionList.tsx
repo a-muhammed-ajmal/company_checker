@@ -17,18 +17,18 @@ const SuggestionList: React.FC<SuggestionListProps> = ({ results, onSelect }) =>
         </p>
       </div>
 
-      <div className="divide-y divide-slate-100 dark:divide-slate-800 max-h-[60vh] overflow-y-auto">
+      <div className="divide-y divide-slate-100 dark:divide-slate-800 max-h-[60vh] sm:max-h-[65vh] md:max-h-[70vh] overflow-y-auto">
         {results.map((item) => (
           <button
             key={`${item.ui_source_id}-${item.id}`}
             onClick={() => onSelect(item)}
-            className="w-full text-left px-4 py-3 hover:bg-blue-50 dark:hover:bg-blue-950/20 active:bg-blue-100 dark:active:bg-blue-900/30 transition-all flex justify-between items-center gap-3 group min-h-[50px]"
+            className="w-full text-left px-4 sm:px-5 py-3 sm:py-4 hover:bg-blue-50 dark:hover:bg-blue-950/20 active:bg-blue-100 dark:active:bg-blue-900/30 transition-all flex justify-between items-center gap-3 group min-h-[50px] sm:min-h-[60px]"
           >
             <div className="flex-1 min-w-0">
-              <h4 className="font-semibold text-xs text-slate-900 dark:text-white leading-snug break-words mb-0.5 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              <h4 className="font-semibold text-xs sm:text-sm text-slate-900 dark:text-white leading-snug break-words mb-0.5 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 {item.displayName}
               </h4>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+              <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">
                 {item.ui_source_id.replace(/_/g, ' ').toUpperCase()}
               </p>
             </div>

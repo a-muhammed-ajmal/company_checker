@@ -29,11 +29,11 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F1F5F9] dark:bg-slate-950 flex flex-col items-center justify-start p-4 font-sans">
+    <div className="min-h-screen bg-[#F1F5F9] dark:bg-slate-950 flex flex-col items-center justify-start p-4 sm:p-6 md:p-8 font-sans">
 
       {/* OFFLINE INDICATOR */}
       {!isOnline && (
-        <div className="w-full max-w-sm bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3 mb-4 mt-4">
+        <div className="w-full max-w-sm sm:max-w-xl md:max-w-2xl bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3 mb-4 mt-4">
           <div className="flex items-center gap-2">
             <WifiOff className="w-4 h-4 text-yellow-600 dark:text-yellow-500" />
             <div>
@@ -45,16 +45,16 @@ function App() {
       )}
 
       {/* CONTENT BOX */}
-      <div className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 p-5 mt-6">
+      <div className="w-full max-w-sm sm:max-w-xl md:max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 p-5 sm:p-6 md:p-8 mt-4 sm:mt-6">
 
         <header className="flex flex-col items-center mb-6 pb-5 border-b border-slate-100 dark:border-slate-800">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-3 shadow-lg shadow-blue-500/30">
-            <ShieldCheck className="w-7 h-7 text-white" strokeWidth={2.5} />
+          <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-3 shadow-lg shadow-blue-500/30">
+            <ShieldCheck className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 text-white" strokeWidth={2.5} />
           </div>
-          <h1 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight mb-1.5">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-1.5">
             Company Checker
           </h1>
-          <p className="text-xs text-slate-600 dark:text-slate-400 font-semibold">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-semibold">
             Instant Verification System
           </p>
         </header>
@@ -67,10 +67,10 @@ function App() {
           loading={loading}
         />
 
-        <p className="text-xs text-slate-500 dark:text-slate-400 text-center mt-4 leading-relaxed">
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 text-center mt-4 leading-relaxed">
           Verify companies across databases
         </p>
-        <p className="text-[11px] text-slate-400 dark:text-slate-500 text-center mt-1">
+        <p className="text-[11px] sm:text-xs text-slate-400 dark:text-slate-500 text-center mt-1">
           Database Updated On: 15th January 2026
         </p>
 
@@ -85,15 +85,15 @@ function App() {
 
         <div className="mt-4 relative">
           {loading && (
-            <div className="flex flex-col items-center py-8">
-              <div className="w-8 h-8 border-3 border-blue-500/20 border-t-blue-600 rounded-full animate-spin mb-3"></div>
-              <span className="text-sm font-semibold text-slate-500 tracking-wide">Searching...</span>
+            <div className="flex flex-col items-center py-8 sm:py-12">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 border-3 border-blue-500/20 border-t-blue-600 rounded-full animate-spin mb-3"></div>
+              <span className="text-sm sm:text-base font-semibold text-slate-500 tracking-wide">Searching...</span>
             </div>
           )}
 
           {!loading && hasSearched && error && (
-            <div className="bg-red-50 dark:bg-red-950/10 border border-red-200 dark:border-red-800 rounded-xl p-4 text-center">
-              <p className="text-red-600 dark:text-red-400 text-sm font-semibold">{error}</p>
+            <div className="bg-red-50 dark:bg-red-950/10 border border-red-200 dark:border-red-800 rounded-xl p-4 sm:p-5 text-center">
+              <p className="text-red-600 dark:text-red-400 text-sm sm:text-base font-semibold">{error}</p>
             </div>
           )}
 
@@ -116,7 +116,7 @@ function App() {
       </div>
 
       <footer className="mt-auto py-6 flex flex-col items-center gap-1 text-center opacity-40 select-none">
-        <p className="text-slate-500 text-[10px] font-medium">
+        <p className="text-slate-500 text-[10px] sm:text-xs font-medium">
           @ 2026 Company Checker by{" "}
           <a
             href="https://www.linkedin.com/in/muhammed-ajmal-consultant/"

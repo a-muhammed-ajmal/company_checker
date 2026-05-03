@@ -6,29 +6,29 @@ interface NotListedCardProps {
 
 const NotListedCard: React.FC<NotListedCardProps> = ({ query }) => {
   return (
-    <div className="w-full bg-white border border-red-100 rounded-2xl p-6 text-center animate-fade-in shadow-xl">
-      <div className="inline-block p-3 bg-red-50 rounded-full mb-4">
-        <span className="text-3xl">❓</span>
+    <div className="w-full bg-white border border-red-100 rounded-2xl p-6 sm:p-7 md:p-8 text-center animate-fade-in shadow-xl">
+      <div className="inline-block p-3 sm:p-4 bg-red-50 rounded-full mb-4">
+        <span className="text-3xl sm:text-4xl">❓</span>
       </div>
 
-      <h2 className="text-lg font-bold text-red-700">Non-Listed Company (NTML)</h2>
+      <h2 className="text-lg sm:text-xl font-bold text-red-700">Non-Listed Company (NTML)</h2>
 
-      <div className="mt-4 bg-red-50 p-3 rounded-lg border border-red-100 text-left">
-        <p className="text-gray-600 text-xs mb-1">Searched for:</p>
-        <p className="font-bold text-gray-900 mb-2 break-all text-sm">"{query}"</p>
+      <div className="mt-4 bg-red-50 p-3 sm:p-4 rounded-lg border border-red-100 text-left">
+        <p className="text-gray-600 text-xs sm:text-sm mb-1">Searched for:</p>
+        <p className="font-bold text-gray-900 mb-2 break-all text-sm sm:text-base">"{query}"</p>
 
         <div className="border-t border-red-200 pt-2 mt-2">
-          <span className="text-red-600 font-bold bg-red-100 px-2 py-0.5 rounded text-[10px] uppercase">Not Found</span>
-          <p className="text-red-700 text-xs mt-3 leading-relaxed">
+          <span className="text-red-600 font-bold bg-red-100 px-2 py-0.5 rounded text-[10px] sm:text-xs uppercase">Not Found</span>
+          <p className="text-red-700 text-xs sm:text-sm mt-3 leading-relaxed">
             No match is found in any lists. This company is not present in our Delisted, TML (Target Market List), or
             Good List databases.
           </p>
         </div>
       </div>
 
-      <div className="mt-5 text-left text-xs text-gray-600 bg-gray-50 p-4 rounded-lg">
+      <div className="mt-5 text-left text-xs sm:text-sm text-gray-600 bg-gray-50 p-4 sm:p-5 rounded-lg">
         <p className="font-bold mb-2">Recommended Actions:</p>
-        <ul className="list-none space-y-1">
+        <ul className="list-none space-y-1.5">
           <li className="flex items-center gap-2">
             ✓ <span className="text-gray-500">Double-check the spelling and try again</span>
           </li>

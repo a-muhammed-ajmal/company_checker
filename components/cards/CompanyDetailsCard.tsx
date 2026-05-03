@@ -73,27 +73,27 @@ const CompanyDetailsCard: React.FC<CompanyDetailsCardProps> = ({ company, hasCro
 
       <div className={`w-full ${theme.bg} border border-slate-100 dark:border-slate-800 rounded-2xl shadow-xl overflow-hidden`}>
         {/* Header */}
-        <div className={`${theme.header} px-3 py-2 flex justify-between items-center`}>
-          <h2 className="text-white font-bold text-base">{theme.title}</h2>
-          <span className={`bg-white ${theme.badgeText} text-[10px] font-black px-1.5 py-0.5 rounded uppercase`}>
+        <div className={`${theme.header} px-4 sm:px-5 py-2.5 sm:py-3 flex justify-between items-center`}>
+          <h2 className="text-white font-bold text-base sm:text-lg">{theme.title}</h2>
+          <span className={`bg-white ${theme.badgeText} text-[10px] sm:text-xs font-black px-2 py-0.5 rounded uppercase`}>
             {theme.badgeLabel}
           </span>
         </div>
 
         {/* Content */}
-        <div className="p-4">
-          <p className="text-[10px] text-gray-500 uppercase font-bold tracking-wide mb-0.5">Company Name</p>
-          <h1 className="text-xl font-black text-gray-900 leading-tight mb-3 break-words">{company.displayName}</h1>
+        <div className="p-4 sm:p-5 md:p-6">
+          <p className="text-[10px] sm:text-xs text-gray-500 uppercase font-bold tracking-wide mb-0.5">Company Name</p>
+          <h1 className="text-xl sm:text-2xl font-black text-gray-900 leading-tight mb-3 break-words">{company.displayName}</h1>
 
-          <div className={`bg-white p-2.5 rounded-lg border ${theme.border} flex items-start gap-2.5 mb-3`}>
-            <span className="text-xl">{theme.icon}</span>
+          <div className={`bg-white p-2.5 sm:p-3 rounded-lg border ${theme.border} flex items-start gap-2.5 mb-4`}>
+            <span className="text-xl sm:text-2xl">{theme.icon}</span>
             <div>
-              <p className="text-xs text-gray-500">Status:</p>
-              <p className={`font-bold ${theme.textMain} text-sm`}>{company.ui_label}</p>
+              <p className="text-xs sm:text-sm text-gray-500">Status:</p>
+              <p className={`font-bold ${theme.textMain} text-sm sm:text-base`}>{company.ui_label}</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-2 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-x-6 text-xs sm:text-sm">
             {company.employer_code && (
               <div className="flex justify-between border-b border-gray-200 pb-1.5">
                 <span className="text-gray-500">Employer Code:</span>
@@ -148,7 +148,6 @@ const CompanyDetailsCard: React.FC<CompanyDetailsCardProps> = ({ company, hasCro
                 <span className="font-bold">{company.employer_id}</span>
               </div>
             )}
-            {/* Show raw status if it exists and adds value */}
             {company.status && company.status !== company.ui_label && (
               <div className="flex justify-between border-b border-gray-200 pb-1.5">
                 <span className="text-gray-500">Status Details:</span>
@@ -156,24 +155,24 @@ const CompanyDetailsCard: React.FC<CompanyDetailsCardProps> = ({ company, hasCro
               </div>
             )}
             {company.reason && (
-              <div className="flex flex-col border-b border-gray-200 pb-1.5">
-                <span className="text-gray-500 text-[10px] mb-0.5">Reason / Notes:</span>
-                <span className="font-bold text-red-600 bg-red-50 p-1.5 rounded text-[10px] leading-relaxed">
+              <div className="flex flex-col border-b border-gray-200 pb-1.5 sm:col-span-2">
+                <span className="text-gray-500 text-[10px] sm:text-xs mb-0.5">Reason / Notes:</span>
+                <span className="font-bold text-red-600 bg-red-50 p-1.5 sm:p-2 rounded text-[10px] sm:text-xs leading-relaxed">
                   {company.reason}
                 </span>
               </div>
             )}
             {company.comments && (
-              <div className="flex flex-col border-b border-gray-200 pb-1.5">
-                <span className="text-gray-500 text-[10px] mb-0.5">Comments:</span>
-                <span className="font-medium italic text-gray-700 bg-gray-50 p-1.5 rounded text-[10px]">
+              <div className="flex flex-col border-b border-gray-200 pb-1.5 sm:col-span-2">
+                <span className="text-gray-500 text-[10px] sm:text-xs mb-0.5">Comments:</span>
+                <span className="font-medium italic text-gray-700 bg-gray-50 p-1.5 sm:p-2 rounded text-[10px] sm:text-xs">
                   {company.comments}
                 </span>
               </div>
             )}
             <div className="flex justify-between border-b border-gray-200 pb-1.5">
               <span className="text-gray-500">Source Table:</span>
-              <span className="font-mono text-[10px] text-gray-400">{company.ui_source_id}</span>
+              <span className="font-mono text-[10px] sm:text-xs text-gray-400">{company.ui_source_id}</span>
             </div>
           </div>
 
