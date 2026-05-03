@@ -1,4 +1,4 @@
-# Company Checker App - Complete Technical Documentation
+# Company Checker — Technical Documentation
 
 ## Table of Contents
 1. [Application Overview](#1-application-overview)
@@ -6,131 +6,136 @@
 3. [Database Details](#3-database-details)
 4. [Search Engine Logic](#4-search-engine-logic)
 5. [Results Hierarchy & Display](#5-results-hierarchy--display)
-6. [Components Reference](#6-components-reference)
-7. [Hooks & Utilities](#7-hooks--utilities)
-8. [Type Definitions](#8-type-definitions)
-9. [Caching System](#9-caching-system)
-10. [Issues & Recommended Fixes](#10-issues--recommended-fixes)
+6. [Component Architecture](#6-component-architecture)
+7. [State Management & Hooks](#7-state-management--hooks)
+8. [Caching System](#8-caching-system)
+9. [PWA Features](#9-pwa-features)
+10. [Type Definitions](#10-type-definitions)
+11. [Issues & Recommendations](#11-issues--recommendations)
+12. [Deployment Checklist](#12-deployment-checklist)
 
 ---
 
 ## 1. Application Overview
 
-**Company Checker** is an instant company verification system that searches multiple databases to determine a company's status (Delisted, TML, or Good Listed).
+**Company Checker** is a Progressive Web App (PWA) for instant company verification across multiple authoritative lists.
 
 ### Purpose
-- Verify company status against multiple authoritative lists
+- Verify company status against 7 database tables in real-time
 - Flag delisted/suspended companies with highest priority
-- Provide instant cross-reference checking across 7 database tables
-- Prevent users from being misled by "Good" status when a company is actually delisted
+- Cross-reference across all lists and warn when a company appears in conflicting lists
+- Prevent users from seeing only "Good" status for a company that is actually delisted
 
 ### Tech Stack
-- **Framework**: Vite 5.x + React 18 + TypeScript
-- **UI**: Tailwind CSS 3.4 + shadcn/ui components
-- **Database**: Supabase (PostgreSQL)
-- **State Management**: React useState + Custom Hooks
-- **Caching**: In-memory + localStorage hybrid
-- **PWA**: vite-plugin-pwa + Workbox (service worker caching)
-- **Build**: TypeScript compiler + Vite bundler
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | Vite 5.x + React 18 + TypeScript |
+| UI | Tailwind CSS 3.4 + shadcn/ui (Radix UI) |
+| Database | Supabase (PostgreSQL) |
+| State | React useState + Custom Hooks |
+| Caching | In-memory + localStorage hybrid |
+| PWA | vite-plugin-pwa + Workbox |
+| Icons | Lucide React |
 
 ### Entry Point
-- `index.html` → `/index.tsx` → `App.tsx`
-- NOT a Next.js app - pure client-side SPA
+`index.html` → `index.tsx` → `App.tsx` — pure client-side SPA (not Next.js)
 
 ---
 
 ## 2. Project Architecture
 
-\`\`\`
-/
-├── public/
-│   └── index.html          # Entry point HTML
+```
+company_checker/
+├── components/
+│   ├── cards/
+│   │   ├── CompanyDetailsCard.tsx   # Detailed company view
+│   │   ├── ErrorCard.tsx            # Error display
+│   │   └── NotListedCard.tsx        # "Not Found" display
+│   ├── ui/                          # shadcn/ui component library (58 files)
+│   ├── DatabaseDiagnostic.tsx       # Dev tool for DB inspection
+│   ├── DetailRow.tsx                # Reusable key-value row
+│   ├── ErrorBoundary.tsx            # React error boundary
+│   ├── SearchBar.tsx                # Search input component
+│   ├── SuggestionList.tsx           # Search results list
+│   └── theme-provider.tsx
 │
-├── src/
-│   ├── assets/
-│   │   └── icons/           # Icon assets
-│   │
-│   ├── components/
-│   │   ├── cards/
-│   │   │   ├── CompanyDetailsCard.tsx   # Detailed company view
-│   │   │   ├── ErrorCard.tsx            # Error display component
-│   │   │   └── NotListedCard.tsx        # "Not Found" display
-│   │   │
-│   │   ├── DatabaseDiagnostic.tsx       # Dev tool for DB inspection
-│   │   ├── DetailRow.tsx                # Reusable detail row
-│   │   ├── ErrorBoundary.tsx            # React error boundary
-│   │   └── SuggestionList.tsx           # Search results list
-│   │
-│   ├── hooks/
-│   │   ├── useDebounce.ts       # Input debouncing
-│   │   ├── useNetworkStatus.ts  # Online/offline detection
-│   │   └── useSearch.ts         # Main search logic hook
-│   │
-│   ├── services/
-│   │   └── api.ts               # Supabase API calls & search logic
-│   │
-│   ├── utils/
-│   │   └── cache.ts             # Hybrid caching system
-│   │
-│   ├── tests/
-│   │   └── cross-reference-test.ts  # Priority logic test suite
-│   │
-│   ├── App.tsx                  # Main application component
-│   ├── constants.ts             # Environment variables
-│   └── types.ts                 # TypeScript definitions
+├── hooks/
+│   ├── useSearch.ts         # Main search state hook
+│   ├── useDebounce.ts       # Input debouncing
+│   ├── useNetworkStatus.ts  # Online/offline detection
+│   ├── use-mobile.ts        # Mobile breakpoint detection
+│   └── use-toast.ts         # Toast notifications
 │
-├── vite.config.ts             # Vite configuration
-└── package.json               # Project dependencies
-\`\`\`
+├── services/
+│   └── api.ts               # Supabase API calls & search logic
+│
+├── utils/
+│   └── cache.ts             # Hybrid caching system
+│
+├── tests/
+│   └── cross-reference-test.ts  # Priority logic test suite
+│
+├── scripts/                 # SQL setup scripts (already applied to DB)
+│   ├── 01_enable_row_level_security.sql
+│   ├── 02_create_performance_indexes.sql
+│   ├── 04_fix_function_search_path.sql
+│   ├── 05_fix_duplicate_policies.sql
+│   ├── 06_remove_unused_indexes.sql
+│   └── backup_all_tables.sql       # Use this to export all table data
+│
+├── public/                  # Static assets & PWA icons
+├── App.tsx                  # Root component
+├── constants.ts             # Environment variable loading
+├── types.ts                 # TypeScript definitions
+├── vite.config.ts           # Build + PWA configuration
+└── .env.example             # Required environment variables template
+```
 
 ---
 
 ## 3. Database Details
 
-### 3.1 Connection Configuration
+### 3.1 Connection
 
 | Setting | Value |
 |---------|-------|
-| **Platform** | Supabase (PostgreSQL) |
-| **Base URL** | `https://cioyfhgzwpciczsppdqo.supabase.co` |
-| **Auth** | Anonymous key via `SUPABASE_ANON_KEY` |
-| **API** | REST API via `/rest/v1/` endpoints |
+| Platform | Supabase (PostgreSQL) |
+| Auth | Anonymous key via environment variables |
+| API | REST API via `/rest/v1/` endpoints |
+| Environment vars | `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` |
 
-### 3.2 Database Tables (7 Total)
+### 3.2 Tables (7 Total)
 
-| # | Table Name | Column Name | UI Type | Priority | Label |
-|---|------------|-------------|---------|----------|-------|
-| 1 | `delisted_company_1` | `NAME OF THE COMPANY` | DELISTED | 1 (Highest) | Delisted Employer from Jan08 |
-| 2 | `delisted_company_2` | `NAME OF THE COMPANY` | DELISTED | 1 (Highest) | Delisted Employer July02 to Dec07 |
-| 3 | `eib_approved` | `company_name` | TML | 2 (Medium) | EIB - Approved Employer |
-| 4 | `enbd_approved` | `company_name` | TML | 2 (Medium) | ENBD - Approved Employer |
-| 5 | `payroll_approved` | `company_name` | TML | 2 (Medium) | Payroll Employer |
-| 6 | `credit_card_approved` | `company_name` | TML | 2 (Medium) | Credit Card Approved Employer |
-| 7 | `good_listed` | `employer_name` | GOOD | 3 (Lowest) | Good List Company (NTML) |
+| # | Table | Column | UI Type | Priority | Label |
+|---|-------|--------|---------|----------|-------|
+| 1 | `delisted_company_1` | `company_name` | DELISTED | 1 | Delisted Employer from Jan 2008 |
+| 2 | `delisted_company_2` | `company_name` | DELISTED | 2 | Delisted Employer July 2002 – Dec 2007 |
+| 3 | `eib_approved` | `company_name` | TML | 3 | EIB – Approved Employer |
+| 4 | `enbd_approved` | `company_name` | TML | 4 | ENBD – Approved Employer |
+| 5 | `payroll_approved` | `company_name` | TML | 5 | Payroll Employer |
+| 6 | `credit_card_approved` | `company_name` | TML | 6 | Credit Card Approved Employer |
+| 7 | `good_listed` | `employer_name` | GOOD | 7 | Good List Company (NTML) |
+
+> **Important:** `good_listed` uses `employer_name` — all other tables use `company_name`.
 
 ### 3.3 UI Type Classification
 
-| UI Type | Priority | Color Theme | Icon | Meaning |
-|---------|----------|-------------|------|---------|
-| **DELISTED** | 1 | Red | ⛔ | Company is suspended/delisted - HIGH RISK |
-| **TML** | 2 | Green | ✅ | Target Market List - Approved employer |
-| **GOOD** | 3 | Blue | 🛡️ | Good Listed - Verified corporate status (NTML) |
+| UI Type | Priority | Color | Icon | Meaning |
+|---------|----------|-------|------|---------|
+| DELISTED | 1 | Red | ⛔ | Suspended/delisted — HIGH RISK |
+| TML | 2–6 | Green | ✅ | Target Market List — Approved employer |
+| GOOD | 7 | Blue | 🛡️ | Good Listed — Verified corporate status |
 
-### 3.4 Data Schema (BaseCompanyData)
+### 3.4 Data Schema
 
-\`\`\`typescript
+```typescript
 interface BaseCompanyData {
   id: string | number
-
-  // Name columns (varies by table)
-  company_name?: string
-  employer_name?: string
-
-  // Normalized versions
+  company_name?: string               // Used in 6/7 tables
+  employer_name?: string              // Used in good_listed only
   company_name_normalized?: string
   employer_name_normalized?: string
-
-  // Additional metadata
   group_name?: string
   category?: string
   legal_status?: string
@@ -144,203 +149,239 @@ interface BaseCompanyData {
   status?: string
   reason?: string
 }
-\`\`\`
+```
 
 ---
 
 ## 4. Search Engine Logic
 
-### 4.1 Text Normalization (`normalizeText`)
+### 4.1 Text Normalization
 
-Prevents duplicate results from spelling variations.
-
-**Operations:**
-1. Convert to lowercase
-2. Replace `&` with `and` (e.g., "Al Nasr Sports & Leisure" = "Al Nasr Sports and Leisure")
-3. Remove entity types: `L.L.C`, `LLC`, `F.Z.E`, `FZE`
-4. Strip all non-alphanumeric characters
+Prevents duplicates from spelling variations:
+1. Lowercase + trim
+2. Replace `&` → `and`
+3. Remove entity types: `LLC`, `L.L.C`, `FZE`, `F.Z.E`
+4. Strip non-alphanumeric characters
 5. Collapse multiple spaces
 
-\`\`\`typescript
-function normalizeText(text: string): string {
-  if (!text) return ""
-  let normalized = text.toLowerCase().trim()
-  normalized = normalized.replace(/&/g, "and")
-  normalized = normalized.replace(/\b(l\.l\.c|llc|f\.z\.e|fze)\b/gi, "")
-  normalized = normalized.replace(/[^a-z0-9\s]/g, "")
-  normalized = normalized.replace(/\s+/g, " ").trim()
-  return normalized
-}
-\`\`\`
-
-### 4.2 Fuzzy Match Scoring (`calculateMatchScore`)
-
-Returns a score from 0-100:
+### 4.2 Fuzzy Match Scoring
 
 | Match Type | Score | Example |
 |------------|-------|---------|
-| **Exact Match** | 100 | Query: "Sobha" → Target: "Sobha" |
-| **Substring Match** | 85 | Query: "Sobha" → Target: "Sobha Construction LLC" |
-| **Token Match** | % of words matched | Query: "Al Nasr Sports" → Target: "Al Nasr Sports Leisure" (75%) |
-| **Threshold** | < 40 discarded | Low relevance results filtered out |
+| Exact match | 100 | "Sobha" → "Sobha" |
+| Substring match | 85 | "Sobha" → "Sobha Construction LLC" |
+| Token match | % of words matched | "Al Nasr Sports" → "Al Nasr Sports Leisure" = 75% |
+| Below threshold | Discarded | Score < 40 filtered out |
 
-### 4.3 Strict Duplication Handling (`handleDuplicates`)
+### 4.3 Search Flow
 
-**Critical Safety Feature**: Ensures delisted companies are ALWAYS shown when they appear in multiple lists.
-
-**Logic:**
-1. Group results by normalized company name
-2. Detect collisions (same company in multiple lists)
-3. If collision between DELISTED + GOOD/TML:
-   - Keep BOTH entries
-   - Show DELISTED entry FIRST
-   - Show GOOD/TML entry as suggestion below
-4. Never show ONLY the "Good" status for a suspended company
-
-\`\`\`typescript
-function handleDuplicates(results: Company[]): Company[] {
-  // Groups by normalized name
-  // If hasDelisted && hasGoodOrTML:
-  //   - Add delisted entries first
-  //   - Then add good/TML entries
-  // Returns deduplication-safe results
-}
-\`\`\`
-
-### 4.4 Search Flow
-
-\`\`\`
-User Input → normalizeText() → Query All 7 Tables (Parallel)
+```
+User Input
     ↓
-Calculate Match Scores → Filter (score >= 40)
+normalizeText() — clean query
     ↓
-Sort by: 1) ui_priority (1→2→3), 2) match_score (desc)
+Query all 7 tables in parallel (ilike *query*)
     ↓
-handleDuplicates() → Ensure DELISTED always shown first
+calculateMatchScore() for each result
     ↓
-Cache Results → Return Top 25
-\`\`\`
+Filter: score >= 40
+    ↓
+Sort: ui_priority ASC, match_score DESC
+    ↓
+handleDuplicates() — ensure DELISTED always shown first
+    ↓
+Cache results
+    ↓
+Return top 25
+```
+
+### 4.4 Duplicate Handling (Safety Critical)
+
+When the same company appears in multiple lists:
+1. Group results by normalized name
+2. If DELISTED + GOOD/TML collision:
+   - Keep **both** entries
+   - Show DELISTED **first**
+   - Show GOOD/TML as secondary suggestion
+3. Never hide a DELISTED entry behind a GOOD status
 
 ---
 
 ## 5. Results Hierarchy & Display
 
-### 5.1 Priority Order (Enforced)
+### Priority Order
 
-\`\`\`
-1. DELISTED (Priority 1) - Always appears first
+```
+1. DELISTED (Priority 1–2) — Always first
    ├── delisted_company_1
    └── delisted_company_2
 
-2. TML (Priority 2) - Appears after delisted
+2. TML (Priority 3–6) — After delisted
    ├── eib_approved
    ├── enbd_approved
    ├── payroll_approved
    └── credit_card_approved
 
-3. GOOD (Priority 3) - Appears last
+3. GOOD (Priority 7) — Last
    └── good_listed
-\`\`\`
+```
 
-### 5.2 Cross-Reference Warning
-
-When a company appears in both DELISTED and GOOD/TML lists:
-- Yellow warning banner is displayed
-- Message: "This entity also appears in other lists. The current status takes priority."
-
-### 5.3 Display States
+### Display States
 
 | State | Component | Condition |
 |-------|-----------|-----------|
-| **Loading** | Spinner | `loading === true` |
-| **Error** | Error Card | `error !== null` |
-| **No Results** | NotListedCard | `results.length === 0 && hasSearched` |
-| **Results Found** | SuggestionList | `results.length > 0 && !selectedCompany` |
-| **Company Selected** | CompanyDetailsCard | `selectedCompany !== null` |
+| Loading | Spinner | `loading === true` |
+| No results | NotListedCard | `results.length === 0 && hasSearched` |
+| Multiple results | SuggestionList | `results.length > 0 && !selectedCompany` |
+| Company selected | CompanyDetailsCard | `selectedCompany !== null` |
+
+### Cross-Reference Warning
+
+When a company appears in both DELISTED and GOOD/TML:
+- Yellow warning banner shown on the details card
+- "This entity also appears in other lists. The current status takes priority."
 
 ---
 
-## 6. Components Reference
+## 6. Component Architecture
 
-### 6.1 App.tsx (Main Component)
+### Component Tree
 
-**State:**
-- `query`: Search input
-- `results`: Array of Company objects
-- `loading`: Boolean
-- `hasSearched`: Boolean
-- `error`: String or null
-- `selectedCompany`: Company or null
+```
+App (Root)
+├── SearchBar
+│   ├── Input field
+│   ├── Clear button (✕) — conditional
+│   └── Check button — mobile only
+│
+└── Results Area (conditional)
+    ├── Loading spinner
+    ├── NotListedCard         — no results
+    ├── SuggestionList        — multiple results
+    │   └── SuggestionItem[]  — clickable rows with badges
+    └── CompanyDetailsCard    — selected company
+        ├── Color-coded header (DELISTED/TML/GOOD)
+        ├── Company name + status badge
+        ├── Detail rows (employer code, legal status, etc.)
+        └── Cross-reference warning (conditional)
+```
 
-**Sections:**
-1. Header (Title + Subtitle)
-2. Database Diagnostic (Dev tool)
-3. Search Bar with Clear/Check buttons
-4. Results Area (conditional rendering)
+### User Journey
 
-### 6.2 SuggestionList.tsx
+```
+1. Landing       → Empty search bar
+2. Typing        → "Sobha" entered
+3. Search        → 7 parallel API calls, loading spinner
+4. Results       → List of matches, priority-ordered
+5. Selection     → Click a result → fade transition
+6. Details       → Full card with all metadata
+7. Back          → Return to results list
+8. Clear (✕)     → Reset to empty state
+```
 
-Displays search results as clickable cards with badges:
-- **DELISTED** → Red badge
-- **TML** → Green badge  
-- **GOOD** → Blue badge
+### Responsive Design
 
-### 6.3 CompanyDetailsCard.tsx
-
-Full company details view with:
-- Dynamic theming based on `ui_type`
-- Back button to results
-- Cross-reference warning (conditional)
-- Metadata display (employer_code, legal_status, source)
-
-### 6.4 NotListedCard.tsx
-
-Shown when no matches found:
-- "Non-Listed Company (NTML)" message
-- Recommended actions checklist
-
-### 6.5 DatabaseDiagnostic.tsx
-
-Dev tool to inspect database structure:
-- Lists all 7 tables
-- Shows columns for each table
-- Displays sample data (first 3 rows)
+| Breakpoint | Behavior |
+|------------|----------|
+| Mobile < 768px | Full-width layout, visible "Check" button, larger touch targets |
+| Desktop ≥ 768px | Centered (max-w-lg), Enter key triggers search, hover effects |
 
 ---
 
-## 7. Hooks & Utilities
+## 7. State Management & Hooks
 
-### 7.1 useSearch.ts
+### useSearch Hook
 
-Main search logic hook exposing:
-- `query`, `setQuery`: Search input state
-- `results`: Search results array
-- `loading`, `hasSearched`, `error`: Status flags
-- `handleSearch(forceRefresh?)`: Execute search
-- `resetSearch()`: Clear all state
+```typescript
+const {
+  query, setQuery,        // Search input
+  results,               // Company[] array
+  loading,               // Boolean
+  hasSearched,           // Boolean
+  error,                 // string | null
+  handleSearch(forceRefresh?),  // Execute search
+  resetSearch()          // Clear all state
+} = useSearch()
+```
 
-### 7.2 useDebounce.ts
+### State Flow
 
-Debounces input value by specified delay.
+```
+Initial: query='', results=[], loading=false, hasSearched=false
+    ↓ User types
+query='Sobha'
+    ↓ User presses Enter or Check
+loading=true, hasSearched=true, results=[]
+    ↓ API completes
+loading=false, results=[Company1, Company2, ...]
+    ↓ User clicks Company1
+selectedCompany=Company1
+    ↓ User clicks Back
+selectedCompany=null
+    ↓ User clicks Clear (✕)
+Back to Initial
+```
 
-### 7.3 useNetworkStatus.ts
+### Other Hooks
 
-Tracks online/offline status via browser events.
-
-### 7.4 cache.ts (SearchCache)
-
-Hybrid caching system:
-- **Memory Cache**: 5-minute TTL
-- **localStorage**: 24-hour TTL (offline support)
-- Methods: `get()`, `set()`, `invalidate()`, `clear()`, `getStats()`
+| Hook | Purpose | Currently Used |
+|------|---------|----------------|
+| `useDebounce` | Delays state updates | Not wired up in App |
+| `useNetworkStatus` | Online/offline detection | Not shown in UI |
+| `use-mobile` | Mobile breakpoint | Yes |
+| `use-toast` | Toast notifications | Available |
 
 ---
 
-## 8. Type Definitions
+## 8. Caching System
 
-### 8.1 CompanySource
+### Cache Layers
 
-\`\`\`typescript
+| Type | TTL | Purpose |
+|------|-----|---------|
+| Memory cache | 5 minutes | Fast repeated searches |
+| localStorage | 24 hours | Offline access |
+
+### Cache Key Format
+
+`company_search_{query.toLowerCase()}`
+
+### Cache Methods
+
+```typescript
+searchCache.get(key)          // Returns cached result or null
+searchCache.set(key, results) // Store results
+searchCache.invalidate(key)   // Remove one entry
+searchCache.clear()           // Clear all (used by "Refresh from Database")
+searchCache.getStats()        // Cache hit/miss stats
+```
+
+---
+
+## 9. PWA Features
+
+### What is Cached (Offline Works)
+- All static assets: JS, CSS, HTML, images
+- Google Fonts (365-day cache)
+- App icons
+
+### What Requires Network
+- Supabase API calls (search results)
+
+### Service Worker
+- `registerType: 'autoUpdate'` — auto-updates in background
+- Workbox handles all caching strategy
+
+### Install Prompt
+- `beforeinstallprompt` event captured
+- Install button shown when browser supports PWA install
+- App runs in `standalone` mode when installed
+
+---
+
+## 10. Type Definitions
+
+```typescript
 type CompanySource =
   | "eib_approved"
   | "enbd_approved"
@@ -349,127 +390,71 @@ type CompanySource =
   | "good_listed"
   | "delisted_company_1"
   | "delisted_company_2"
-\`\`\`
 
-### 8.2 UIType
-
-\`\`\`typescript
 type UIType = "DELISTED" | "TML" | "GOOD"
-\`\`\`
 
-### 8.3 Company (Full Interface)
-
-\`\`\`typescript
 interface Company extends BaseCompanyData {
-  displayName: string        // Resolved name for display
-  ui_type: UIType           // DELISTED | TML | GOOD
-  ui_priority: number       // 1=High, 2=Medium, 3=Low
+  displayName: string        // Resolved from company_name or employer_name
+  ui_type: UIType
+  ui_priority: number        // 1 = highest priority
   ui_source_id: CompanySource
-  ui_label: string          // Human-readable status
-  match_score?: number      // 0-100 relevance score
+  ui_label: string           // Human-readable status label
+  match_score?: number       // 0–100
 }
-\`\`\`
+```
 
 ---
 
-## 9. Caching System
+## 11. Issues & Recommendations
 
-### 9.1 Cache Keys
+### Critical
 
-Format: `company_search_${query.toLowerCase()}`
+| # | Issue | Location | Fix |
+|---|-------|----------|-----|
+| 1 | No rate limiting on search | `api.ts` | Add throttle/debounce |
+| 2 | No offline indicator in UI | App | Wire up `useNetworkStatus` |
 
-### 9.2 TTL Values
+### Code Improvements
 
-| Cache Type | TTL | Purpose |
-|------------|-----|---------|
-| Memory | 5 minutes | Fast repeated searches |
-| localStorage | 24 hours | Offline access |
+| # | Issue | Recommendation |
+|---|-------|----------------|
+| 1 | `useDebounce` not wired up | Add auto-search on debounced input |
+| 2 | `ErrorCard` component exists but unused | Replace inline error with ErrorCard |
+| 3 | Console.log statements in production | Remove or gate behind `import.meta.env.DEV` |
+| 4 | No loading skeleton | Add skeleton loader in SuggestionList |
 
-### 9.3 Cache Bypass
+### Missing Features (Future)
 
-- "Refresh from Database" button calls `searchCache.clear()`
-- `handleSearch(true)` forces refresh
-
----
-
-## 10. Issues & Recommended Fixes
-
-### 10.1 CRITICAL ISSUES
-
-| # | Issue | Location | Severity | Fix |
-|---|-------|----------|----------|-----|
-| 1 | **Hardcoded Supabase credentials** | `constants.ts` | HIGH | Move to environment variables only |
-| 2 | **No input sanitization** | `api.ts` | HIGH | Sanitize query before SQL injection |
-| 3 | **No rate limiting** | `api.ts` | MEDIUM | Add throttling for API calls |
-
-### 10.2 BUGS
-
-| # | Bug | Location | Fix |
-|---|-----|----------|-----|
-| 1 | `useDebounce` hook not used | `App.tsx` | Implement debounced search |
-| 2 | `useNetworkStatus` hook not used | Anywhere | Add offline indicator |
-| 3 | `ErrorCard` component not imported | `App.tsx` | Use ErrorCard instead of inline error |
-
-### 10.3 CODE IMPROVEMENTS
-
-| # | Issue | Location | Recommendation |
-|---|-------|----------|----------------|
-| 1 | Console.log statements in production | `api.ts` | Remove or conditionally disable |
-| 2 | No loading skeleton | `SuggestionList.tsx` | Add skeleton loader |
-| 3 | Missing accessibility | Multiple | Add ARIA labels, keyboard navigation |
-| 4 | No pagination | `api.ts` | Implement "Load More" for large results |
-| 5 | Duplicate file | `styles/globals.css` + `app/globals.css` | Remove duplicate |
-
-### 10.4 SECURITY FIXES NEEDED
-
-\`\`\`typescript
-// constants.ts - CURRENT (INSECURE)
-export const SUPABASE_ANON_KEY = getEnv("SUPABASE_ANON_KEY", "sb_publishable_SJ43W6d...")
-
-// RECOMMENDED - Remove hardcoded fallback
-export const SUPABASE_ANON_KEY = getEnv("SUPABASE_ANON_KEY")
-if (!SUPABASE_ANON_KEY) {
-  throw new Error("Missing SUPABASE_ANON_KEY environment variable")
-}
-\`\`\`
-
-### 10.5 MISSING FEATURES
-
-1. **Search history** - Track recent searches
-2. **Export results** - Download as CSV/PDF
-3. **Bulk search** - Upload list of companies
-4. **Admin panel** - Manage database entries
-5. **Audit logging** - Track who searched what
-
-### 10.6 NORMALIZATION IMPROVEMENTS
-
-Current `normalizeText` should also handle:
-- Arabic characters (if applicable)
-- Common abbreviations (PVT → PRIVATE, LTD → LIMITED)
-- Unicode normalization
-
-\`\`\`typescript
-// Add to normalizeText()
-normalized = normalized.replace(/\b(pvt|pvt\.)\b/gi, "private")
-normalized = normalized.replace(/\b(ltd|ltd\.)\b/gi, "limited")
-normalized = normalized.replace(/\b(co|co\.)\b/gi, "company")
-\`\`\`
+1. **Search history** — Track recent searches in localStorage
+2. **Bulk search** — Upload a list of companies and verify all at once
+3. **Export results** — Download as CSV/PDF
+4. **Admin panel** — Integrate DatabaseDiagnostic into a proper admin route
+5. **Offline banner** — Show "You are offline" message using `useNetworkStatus`
+6. **Normalization improvements** — Handle `PVT → PRIVATE`, `LTD → LIMITED`, Arabic characters
 
 ---
 
-## Appendix: File Summary
+## 12. Deployment Checklist
 
-| File | Lines | Purpose |
-|------|-------|---------|
-| `services/api.ts` | ~200 | Core search logic & Supabase API |
-| `App.tsx` | ~100 | Main application component |
-| `types.ts` | ~50 | TypeScript interfaces |
-| `utils/cache.ts` | ~90 | Caching system |
-| `hooks/useSearch.ts` | ~40 | Search state management |
-| `components/SuggestionList.tsx` | ~40 | Results display |
-| `components/cards/CompanyDetailsCard.tsx` | ~100 | Detail view |
-| `components/DatabaseDiagnostic.tsx` | ~120 | Dev diagnostic tool |
+- [ ] `VITE_SUPABASE_URL` set in Vercel environment variables
+- [ ] `VITE_SUPABASE_ANON_KEY` set in Vercel environment variables
+- [ ] RLS enabled on all 7 Supabase tables
+- [ ] GIN indexes created on all searchable columns
+- [ ] PWA icons present in `/public`
+- [ ] Service worker tested in production build (`npm run preview`)
+- [ ] Mobile responsiveness verified on real device
+- [ ] Lighthouse score > 90
 
 ---
 
-*Documentation generated for Company Checker App v1.0*
+## Backup Procedure
+
+After each data update from the bank, export all tables as CSV:
+1. Go to Supabase Dashboard → Table Editor
+2. Open each table → click the export/download icon
+3. Save CSV files to Google Drive or email them to yourself
+4. See `scripts/backup_all_tables.sql` for SQL-based export queries
+
+---
+
+*Last updated: 2026-05-03*
