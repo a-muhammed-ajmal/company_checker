@@ -71,7 +71,7 @@ function App() {
           Verify companies across databases
         </p>
         <p className="text-[11px] sm:text-xs text-slate-400 dark:text-slate-500 text-center mt-1">
-          Database Updated On: 15th January 2026
+          Database Updated On: 1st May 2026
         </p>
 
         {hasSearched && results.length > 0 && !selectedCompany && (
