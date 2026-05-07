@@ -115,9 +115,7 @@ company_checker/
 | 4 | `enbd_approved` | `company_name` | TML | 4 | ENBD – Approved Employer |
 | 5 | `payroll_approved` | `company_name` | TML | 5 | Payroll Employer |
 | 6 | `credit_card_approved` | `company_name` | TML | 6 | Credit Card Approved Employer |
-| 7 | `good_listed` | `employer_name` | GOOD | 7 | Good List Company (NTML) |
-
-> **Important:** `good_listed` uses `employer_name` — all other tables use `company_name`.
+| 7 | `good_listed` | `company_name` | GOOD | 7 | Good List Company (NTML) |
 
 ### 3.3 UI Type Classification
 

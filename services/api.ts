@@ -76,7 +76,7 @@ const TABLE_CONFIGS: TableConfig[] = [
   // TIER 3: GOOD LIST (Blue Theme)
   {
     tableName: "good_listed",
-    columnName: "employer_name",
+    columnName: "company_name",
     type: "GOOD",
     priority: 7,
     label: "Good List Company (NTML): Verified Corporate Status",

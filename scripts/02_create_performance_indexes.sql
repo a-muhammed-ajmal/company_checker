@@ -20,9 +20,9 @@ ON payroll_approved USING gin (company_name gin_trgm_ops);
 CREATE INDEX IF NOT EXISTS idx_credit_card_company_name_gin 
 ON credit_card_approved USING gin (company_name gin_trgm_ops);
 
--- Good Listed - Index on employer_name (note: different column name)
-CREATE INDEX IF NOT EXISTS idx_good_listed_employer_name_gin 
-ON good_listed USING gin (employer_name gin_trgm_ops);
+-- Good Listed - Index on company_name
+CREATE INDEX IF NOT EXISTS idx_good_listed_company_name_gin
+ON good_listed USING gin (company_name gin_trgm_ops);
 
 -- Delisted Company 1 - Index on company_name
 CREATE INDEX IF NOT EXISTS idx_delisted_1_company_name_gin 

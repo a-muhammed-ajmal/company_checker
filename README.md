@@ -53,9 +53,7 @@ The app searches 7 Supabase tables in parallel on every query:
 | 4 | `enbd_approved` | `company_name` | TML | 4 |
 | 5 | `payroll_approved` | `company_name` | TML | 5 |
 | 6 | `credit_card_approved` | `company_name` | TML | 6 |
-| 7 | `good_listed` | `employer_name` | GOOD | 7 |
-
-> **Note:** `good_listed` uses `employer_name` — all other tables use `company_name`.
+| 7 | `good_listed` | `company_name` | GOOD | 7 |
 
 ---
 
